@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>首页</title>
+    <script src="js/head.js"></script>
+    <style>
+        #slider img {
+            width: 100%;
+            vertical-align: top;
+        }
+
+        .nav-panel {
+            padding-top: 10px;
+        }
+
+        .panel-item {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .mui-bar {
+            background-color: #1BBC9B;
+        }
+
+        .mui-title {
+            color: white;
+            z-index: -1;
+        }
+
+        /*.panel-item li:nth-child(2n+1){margin-right:3%;}*/
+        .panel-item li {
+            float: left;
+            width: 50%;
+            margin-bottom: 10px;
+            text-align: center;
+            height: 150px;
+            line-height: 150px;
+        }
+
+        .panel-item li:nth-child(1) {
+            background-color: #fc8d8d;
+        }
+
+        .panel-item li:nth-child(2) {
+            background-color: #5fceca;
+        }
+
+        .panel-item li:nth-child(3) {
+            background-color: #f8be4d;
+        }
+
+        .panel-item li:nth-child(4) {
+            background-color: #91a0f1;
+        }
+
+        .panel-item li img {
+            height: 60px;
+        }
+
+        .panel-item li p {
+            font-size: 18px;
+            color: white;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        .panel-item li span {
+            color: #1A1A1A;
+            display: block;
+            padding: 16px 0 25px;
+        }
+
+        .read-text {
+            color: red;
+            line-height: 44px;
+            font-size: 14px;
+            color: white;
+            z-index: 99;
+        }
+
+        .mui-bar-nav > a {
+            color: white;
+        }
+
+        .camera-style {
+            width: 100px;
+            height: 100px;
+            border-radius: 100%;
+            background-color: white;
+            position: fixed;
+            top: 305px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 999;
+        }
+
+        .camera-style input {
+            width: 100px;
+            height: 100px;
+            z-index: 99;
+            position: absolute;
+            left: 0px;
+            opacity: 0;
+        }
+
+        .camera-style p {
+            color: #333333;
+            font-size: 14px;
+            text-align: center;
+        }
+
+        .get-images {
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+
+        .img-height {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+<header class="mui-bar mui-bar-nav">
+    <!--左边顶部 系统消息 -->
+    <a data-href="unread.html" class="read-text mui-pull-left" id="rowText"></a>
+    <h1 class="mui-title">我的巡查</h1>
+    <input type="hidden" value="0" id="status"/>
+
+    <!-- <div id="rows" class="mui-pull-left" style="width:100px;"></div>-->
+    <!--右边顶部 系统消息 -->
+    <a data-href="orderUserReader.html" class="mui-pull-right read-text" id="rector" style="margin-left: 15px;display: none;">巡查消息</a>
+    <a data-href="teacherReader.html" class="mui-pull-right read-text" id="classTeacher">巡查消息</a>
+</header>
+<div class="mui-content">
+    <div id="slider" style="height:150px;position: relative;">
+        <a href="#">
+            <img id="schoollogo" src="img/index_gj.jpg" style="height: 100%;"/>
+        </a>
+        <img id="schooltip" src="img/logo_gj.png"
+             style="position: absolute;width: 200px;height: 33px;top: 10px;left: 15px;"/>
+    </div>
+    <div class="nav-panel">
+        <ul class="panel-item">
+            <li id="schoolSearch" style="display: none;"></li><!-- 校务巡查 -->
+            <li id="orderSearch" style="display: none;"></li><!-- 后勤巡查 -->
+            <li id="teacherSearch" style="display: none;background-color: #f8be4d;"></li><!-- 教师执勤 -->
+            <li id="lastSearch" style="display: none;background-color: #91a0f1;"></li><!-- 护校队巡查 -->
+        </ul>
+    </div>
+    <!--<div class="camera-style" id="cameraNews" style="display: none;">
+        <div class="get-images">
+            <input type="file" id="filed" accept="image/*" capture="camera"  />
+            <center><img src="img/camera.png" class="img-height" /></center>
+            <p>请拍照签到</p>
+        </div>
+    </div>-->
+</div>
+<script src="js/foot.js"></script>
+<script src="js/jquery-1.7.2.js"></script>
+<script>
+    //		var userId = DOFUN.request('userId');
+    // var userId = "zoujuanjuan@whshljgjxx"; //后勤巡查 测试账号
+    var userId = "Wqy123456"; //后勤巡查 测试账号
+    // var userId = "liyanmeiwhshljxx"; //总校长
+    // var userId = "gjxgy"; //国际校管
+    // var userId = "shaw0158"; //国际校管
+    // var userId = "ygxgy"; //阳光校管
+    DOFUN.commonPage = mui.Class.extend({
+        init: function () {
+            DOFUN.User.init({
+                id: userId
+            });
+            this.initEvent();
+            this.loadData();
+        },
+        loadData: function () {
+            //模板查询
+
+            DOFUN.Api.post("notice/list", {userId: userId}, function (result) {
+                var data = result.obj;
+                var i = 0;
+                console.info(JSON.stringify(data))
+                for (var j = 0; j < data.rows.length; j++) {
+                    if (data.rows[j].isread == 0) {
+                        i++;
+                    }
+                }
+                document.getElementById("rowText").innerHTML = "系统消息(<b style='color:red;'>" + i + "</b>)";
+            });
+
+            DOFUN.Api.get("inspectionMessage/list1", {userId: userId}, function (result) {
+                var data = result.obj;
+                var i = 0;
+                console.info(JSON.stringify(data))
+                for (var j = 0; j < data.allcount.length; j++) {
+                    if (data.allcount[j].isread == 0) {
+                        i++;
+                    }
+                }
+                document.getElementById("classTeacher").innerHTML = "巡查消息(<b style='color:red;'>" + i + "</b>)";
+            });
+
+            //			    	var userId = DOFUN.User.getUser();
+            //			    	var userId = userId.id;
+            var schoolSearch = DOFUN.byId("schoolSearch");
+            var orderSearch = DOFUN.byId("orderSearch");
+            var teacherSearch = DOFUN.byId("teacherSearch");
+            var lastSearch = DOFUN.byId("lastSearch");
+            var rector = DOFUN.byId("rector");
+            var classTeacher = DOFUN.byId("classTeacher");
+            console.log(userId);
+            DOFUN.Api.post("userInf/queryrole", {
+                "userId": userId
+            }, function (data) {
+                console.log(data);
+                var teacher = data.obj.roleId;
+                var schoolId = data.obj.agentId;
+                var templateMessage = data.obj.templatename;
+                var templateOrder = templateMessage.split(",");
+                //学校不同，首页图片不同
+                if ("1" == schoolId) {//武汉市红领巾国际学校
+                    $('#schoollogo').attr('src', 'img/index_gj.jpg');
+                    $('#schooltip').attr('src', 'img/logo_gj.png');
+                } else if ("2" == schoolId) {//武汉市红领巾学校（阳光校区）
+                    $('#schoollogo').attr('src', 'img/index_yg.jpg');
+                    $('#schooltip').attr('src', 'img/logo_yg.png');
+                } else if ("3" == schoolId) {//武汉市红领巾学校（CBD校区）
+                    $('#schoollogo').attr('src', 'img/index_cbd.jpg');
+                    $('#schooltip').attr('src', 'img/logo_cbd.png');
+                }
+
+                DOFUN.Api.get("inspectionTemplate/template", {}, function (data) {
+                    var tp = data.obj;
+                    var txt;
+                    var xwTemplateId ='';
+                    var hqTemplateId ='';
+                    for (var i = 0; i < tp.length; i++) {
+                        if (tp[i].name == "校务巡查") {
+                            xwTemplateId = tp[i].id;
+                            txt = '<a data-href="patrol.html?templateId=' + tp[i].id + '&name=校务巡查"><p>' + tp[i].name + '</p></a>';
+                            $("#schoolSearch").html(txt);
+                        } else if (tp[i].name == "后勤巡查") {
+                            hqTemplateId = tp[i].id;
+                            txt = '<a data-href="patrolItem1.html?templateId=' + tp[i].id + '&name=后勤巡查"><p>' + tp[i].name + '</p></a>';
+                            $("#orderSearch").html(txt);
+                        } else if (tp[i].name == "教师执勤") {
+                            txt = '<a data-href="JWpatrol.html?templateId=' + tp[i].id + '&name=教师执勤"><p>' + tp[i].name + '</p></a>';
+                            $("#teacherSearch").html(txt);
+                        } else if (tp[i].name == "护校队巡查") {
+                            txt = '<a data-href="HXDpatrol.html?templateId=' + tp[i].id + '&name=护校队巡查"><p>' + tp[i].name + '</p></a>';
+                            $("#lastSearch").html(txt);
+                        }
+                    }
+
+                    //不管是否给角色，都显示
+                    if (templateOrder.indexOf("校务巡查") >= 0) {
+                        schoolSearch.style.display = "block";
+                    } else {
+                        //如果没有赋权校务巡查权限，则跳转到数据查询页面
+                        schoolSearch.style.display = "block";
+                        $(schoolSearch).find("a").attr("data-href", "XWHebdomad.html?tpid="+xwTemplateId);
+                    }
+
+                    if (templateOrder.indexOf("后勤巡查") >= 0) {
+                        orderSearch.style.display = "block";
+                    } else {
+                        //如果没有赋权后勤巡查权限，则跳转到数据查询页面
+                        orderSearch.style.display = "block";
+                        $(orderSearch).find("a").attr("data-href", "HQHebdomad.html?tpid="+hqTemplateId);
+                    }
+                    if (templateOrder.indexOf("教师执勤") >= 0) {
+                        teacherSearch.style.display = "block";
+                    }
+                    if (templateOrder.indexOf("护校队巡查") >= 0) {
+                        lastSearch.style.display = "block";
+                    }
+
+                });
+
+
+
+
+
+                if (teacher == 1 || teacher == 5) { //1超级管理员 5校长 看管理员级别巡查消息
+                    rector.style.display = "block";
+                    classTeacher.style.display = "none";
+                } else { //普通老师看 普通巡查消息
+                    classTeacher.style.display = "block";
+                    rector.style.display = "none";
+                }
+
+            })
+
+        },
+        initEvent: function () {
+            var that = this;
+            DOFUN.Api.get("userInf/queryUserInfo/" + userId, function (obj) {
+                var data = obj.obj;
+                var parmas = JSON.stringify(data);
+                DOFUN.setItem("news", parmas);//设置用户信息
+            })
+            DOFUN.Api.get("inspectionMessage/getOne", function (data) {
+                var uuid = data.obj;//指定通报人
+                var userjson = DOFUN.getItem("news");
+                var user = JSON.parse(userjson);
+                if (uuid == user.id) {
+                    rector.style.display = "block";
+                }
+            })
+            //			        var cameraNews = DOFUN.byId("cameraNews");
+            var status = DOFUN.byId("status");
+            var mask = mui.createMask(function () {
+                return mask.flag;
+
+
+            });
+            mask.flag = false;
+
+            var msg = sessionStorage.getItem("data");
+
+            if (msg == 0 || msg == null) {
+                //						cameraNews.style.display = "block";
+                //						mask.show();
+                //						$("#filed").change(function(){
+                //					      var file = $(this).get(0).files[0];
+                //					      var reader = new FileReader();
+                //					      reader.readAsDataURL(file);
+                //					      reader.onload=function(e){
+                //					      	 var images=e.target.result;
+                //					      	 console.info(userId)
+                //					      	  DOFUN.Api.post("twocode/photograph",{"uid":userId,"images":images},function(data){
+                //					      	        console.log(data);
+                //					      	  		//在这里把status状态改变过来
+                //									if(data.rspcod == '200'){
+                //						      	  	    sessionStorage.setItem("data",1);
+                //						      	  		mask.flag = true;
+                //						      	  		mask.close();
+                ////						      	  		cameraNews.style.display = "none";
+                //					      	  	    }
+                //					      	  })
+                //						  }
+                //					   });
+            } else {
+                //			        	mask.close();//关闭遮罩层
+            }
+        }
+    });
+
+    mui.plusReady(function () {
+        new DOFUN.Init('common');
+    });
+</script>
+</body>
+</html>

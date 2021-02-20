@@ -1,0 +1,957 @@
+<!DOCTYPE html>
+<!-- 校务巡查 动态属性 -->
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>校务巡查</title>
+    <script src="js/head.js"></script>
+    <script type="text/javascript" src="js/jquery-1.7.2.js"></script>
+    <link rel="stylesheet" href="css/mui.picker.css"/>
+    <link rel="stylesheet" href="css/mui.poppicker.css"/>
+    <style>
+        .partol-list {
+            position: fixed;
+            width: 100%;
+            z-index: 2;
+        }
+
+        .partol-list .mui-table-view-divider {
+            color: #19af75;
+        }
+
+        .mui-row.mui-fullscreen > [class*="mui-col-"] {
+            height: 100%;
+        }
+
+        .mui-col-xs-4, .mui-col-xs-8 {
+            overflow-y: auto;
+            height: 100%;
+            background-color: #fff;
+        }
+
+        .mui-segmented-control .mui-control-item {
+            line-height: 50px;
+            width: 100%;
+        }
+
+        .mui-control-content {
+            display: block;
+        }
+
+        .mui-bar {
+            background-color: #1BBC9B;
+        }
+
+        .mui-title {
+            color: white;
+        }
+
+        .mui-bar a {
+            color: white;
+        }
+
+        .mui-segmented-control.mui-segmented-control-inverted .mui-control-item.mui-active {
+            background-color: #fff;
+        }
+
+        .mui-segmented-control.mui-segmented-control-inverted .mui-control-item {
+            border: none;
+            position: relative;
+        }
+
+        .mui-segmented-control.mui-segmented-control-inverted .mui-control-item.mui-active {
+            color: #19af75;
+        }
+
+        .mui-segmented-control.mui-segmented-control-inverted.mui-segmented-control-vertical .mui-control-item, .mui-segmented-control.mui-segmented-control-inverted.mui-segmented-control-vertical .mui-control-item.mui-active {
+            border-bottom: none;
+        }
+
+        .mui-segmented-control.mui-segmented-control-inverted {
+            background-color: #fff;
+            color: #1a1a1a;
+            font-size: 14px;
+        }
+
+        .mui-input-group:before, .mui-input-group:after, .mui-input-group .mui-input-row:after {
+            height: 0;
+        }
+
+        .br1:after, .bb1:after {
+            background-color: #eaebee;
+        }
+
+        .mui-control-content {
+            font-size: 14px;
+        }
+
+        .mui-control-content .mui-input-row label {
+            color: #bfbfbf;
+            width: 150px;
+        }
+
+        .file-update {
+            width: 50px;
+            height: 50px;
+            font-size: 14px;
+            opacity: 0;
+        }
+
+        textarea {
+            padding: 5px;
+            font-size: 12px;
+        }
+
+        textarea::-webkit-input-placeholder {
+            font-size: 12px;
+        }
+
+        .mui-segmented-control.mui-segmented-control-inverted .mui-control-item {
+            color: #8f8f94;
+        }
+
+        .foot-btn {
+            width: 90%;
+            margin-left: 10px;
+            margin-top: 20px;
+            background-color: #1BBC9B;
+            border: none;
+            color: white;
+            margin-bottom: 10px;
+        }
+
+        #XWHebdomad {
+            width: 90%;
+            margin-left: 10px;
+        }
+
+        #XWHebdomad a {
+            width: 100%;
+            height: 40px;
+            display: inline-block;
+            margin-bottom: 15px;
+            text-align: center;
+            line-height: 40px;
+            background-color: gray;
+            color: white;
+            font-size: 14px;
+            border-radius: 5px;
+        }
+
+        .select-style {
+            width: 50%;
+            padding: 0px;
+            margin-top: 0px;
+        }
+
+        .center-content {
+            width: 100%;
+            height: 40px;
+        }
+
+        .center-content p {
+            width: 58%;
+            padding-left: 20px;
+        }
+
+        .center-content select {
+            width: 50%;
+        }
+
+        #DynamicAttrs {
+            margin-bottom: 20px;
+        }
+
+        .mui-input-row.images-group {
+            height: auto;
+        }
+
+        .section-title {
+            padding: 10px 0;
+            font-size: 15px;
+            color: #333;
+            font-weight: 400;
+            margin: 0;
+        }
+
+        .section-images {
+            margin-bottom: 0;
+            display: inline-block;
+            margin-left: 10px;
+        }
+
+        .mui-input-row.images-group {
+            height: auto;
+        }
+
+        .section-images-add {
+            display: inline-block;
+            width: 48px;
+            height: 48px;
+            border: 1px solid #999;
+            border-radius: 1px;
+            position: relative;
+        }
+
+        .file-style {
+            width: 50px;
+            height: 50px;
+            border: 1px solid #1BBC9B;
+            margin-left: 20px;
+            background-image: url(img/add.png);
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        #imgshow {
+            width: 50px;
+            height: 50px;
+            border: none;
+        }
+
+        .select-style {
+            width: 135px;
+            height: 35px;
+            border-radius: 5px;
+            box-shadow: 0 0 5px #ccc;
+            position: relative;
+            float: left;
+            margin-bottom: 8px;
+        }
+
+        .select-style select {
+            border: none;
+            outline: none;
+            width: 100%;
+            height: 35px;
+            line-height: 35px;
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            padding-left: 15px;
+        }
+
+        .select-style::after {
+            content: "";
+            width: 14px;
+            height: 8px;
+            background: url(img/icon_arrow_down_x2.png) no-repeat center;
+            position: absolute;
+            right: 20px;
+            top: 45%;
+            pointer-events: none;
+        }
+
+        .select-style select > option {
+            border: none;
+        }
+
+        .mui-btn-blue, .mui-btn-primary, input[type=submit] {
+            background-color: #19af75;
+            border: 1px solid #19af75;
+        }
+
+        .section-images-add {
+            display: inline-block;
+            margin-bottom: 10px;
+            margin-left: 5px;
+            width: 48px;
+            height: 48px;
+            border: 1px solid #1BBC9B;
+            border-radius: 1px;
+            position: relative;
+        }
+
+        .file-update {
+            width: 50px;
+            height: 50px;
+            font-size: 14px;
+            opacity: 0;
+        }
+
+        .section-images-added {
+            width: 42px;
+            height: 42px;
+            margin-left: 8px;
+        }
+
+        .section-images-add:after, .section-images-add:before {
+            background: #1BBC9B;
+        }
+
+        .mui-preview-image.mui-fullscreen {
+            position: fixed;
+            z-index: 20;
+            background-color: #000;
+        }
+
+        .mui-preview-header,
+        .mui-preview-footer {
+            position: absolute;
+            width: 100%;
+            left: 0;
+            z-index: 10;
+        }
+
+        .mui-preview-header {
+            height: 44px;
+            top: 0;
+        }
+
+        .mui-preview-footer {
+            height: 50px;
+            bottom: 0px;
+        }
+
+        .mui-preview-header .mui-preview-indicator {
+            display: block;
+            line-height: 25px;
+            color: #fff;
+            text-align: center;
+            margin: 15px auto 4px;
+            width: 70px;
+            background-color: rgba(0, 0, 0, 0.4);
+            border-radius: 12px;
+            font-size: 16px;
+        }
+
+        .mui-preview-image {
+            display: none;
+            -webkit-animation-duration: 0.5s;
+            animation-duration: 0.5s;
+            -webkit-animation-fill-mode: both;
+            animation-fill-mode: both;
+        }
+
+        .mui-preview-image.mui-preview-in {
+            -webkit-animation-name: fadeIn;
+            animation-name: fadeIn;
+        }
+
+        .mui-preview-image.mui-preview-out {
+            background: none;
+            -webkit-animation-name: fadeOut;
+            animation-name: fadeOut;
+        }
+
+        .mui-preview-image.mui-preview-out .mui-preview-header,
+        .mui-preview-image.mui-preview-out .mui-preview-footer {
+            display: none;
+        }
+
+        .mui-zoom-scroller {
+            position: absolute;
+            display: -webkit-box;
+            display: -webkit-flex;
+            display: flex;
+            -webkit-box-align: center;
+            -webkit-align-items: center;
+            align-items: center;
+            -webkit-box-pack: center;
+            -webkit-justify-content: center;
+            justify-content: center;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            -webkit-backface-visibility: hidden;
+        }
+
+        .mui-zoom {
+            -webkit-transform-style: preserve-3d;
+            transform-style: preserve-3d;
+        }
+
+        .mui-slider .mui-slider-group .mui-slider-item img {
+            width: auto;
+            height: auto;
+            max-width: 100%;
+            max-height: 100%;
+        }
+
+        .mui-android-4-1 .mui-slider .mui-slider-group .mui-slider-item img {
+            width: 100%;
+        }
+
+        .mui-android-4-1 .mui-slider.mui-preview-image .mui-slider-group .mui-slider-item {
+            display: inline-table;
+        }
+
+        .mui-android-4-1 .mui-slider.mui-preview-image .mui-zoom-scroller img {
+            display: table-cell;
+            vertical-align: middle;
+        }
+
+        .mui-preview-loading {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            display: none;
+        }
+
+        .mui-preview-loading.mui-active {
+            display: block;
+        }
+
+        .mui-preview-loading .mui-spinner-white {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            margin-left: -25px;
+            margin-top: -25px;
+            height: 50px;
+            width: 50px;
+        }
+
+        .mui-preview-image img.mui-transitioning {
+            -webkit-transition: -webkit-transform 0.5s ease, opacity 0.5s ease;
+            transition: transform 0.5s ease, opacity 0.5s ease;
+        }
+
+        @-webkit-keyframes fadeIn {
+            0% {
+                opacity: 0;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+
+        @-webkit-keyframes fadeOut {
+            0% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+            }
+        }
+
+        @keyframes fadeOut {
+            0% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+            }
+        }
+
+        .userPickButton {
+            width: 35%;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+            padding: 6px 8px;
+        }
+    </style>
+</head>
+<body>
+<div class="partol-list">
+    <div style="display: none;"><img src="" id="imgPreview" data-preview-src="" data-preview-group="1"></div>
+    <div class="mui-table-view-divider">
+        <img src="img/cls.png"/>班级
+    </div>
+</div>
+<div class="mui-content mui-row mui-fullscreen" style="top: 35px;">
+    <div class="mui-col-xs-4 br1">
+        <div id="segmentedControls"
+             class="mui-segmented-control mui-segmented-control-inverted mui-segmented-control-vertical">
+
+        </div>
+    </div>
+    <div class="mui-col-xs-8">
+        <div class="mui-control-content" id="segmentedControlContent">
+            <form id="form1" class="mui-input-group" style="padding-top: 5px;">
+                <div class="mui-input-group iradio" id="mui-input-group"></div>
+
+            </form>
+        </div>
+        <button id="submitBtn" type="button" class="mui-btn foot-btn">提交</button>
+        <div id="XWHebdomad"></div><!--一周统计 -->
+    </div>
+
+</div>
+
+<script type="text/template" id="mui-input-group-tpl"><!--右边模板-->
+<!--数据格式-->
+<!--obj-->
+<!--|-  dnameList[]-->
+<!--|      |- did 字典id 1 2 3-->
+<!--|      |- dname 字典name 教师 学生 管理-->
+<!--|      |- log 历史提交记录-->
+<!--|          |- result[] 提交记录属性明细分数-->
+<!--|              |- attr 明细对应动态属性-->
+<!--|      |- attrs[]-->
+<!--|      |- teachers[] 班级关联的教师-->
+<!--|-  dynamicAttrList 动态属性合计-->
+{{each records.dnameList as dname index }}
+<div id="count" class="more-count">
+    <div class="mui-input-row mui-checkbox mui-left">
+        <input name="radio" type="checkbox" value="{{dname.did}}" class="select-check" checked>
+        <!--1教师 2	学生 3管理-->
+        <label>{{dname.dname}}</label>
+    </div>
+
+    <div id="DynamicAttrs">
+        {{if dname.log != null}}
+            {{each dname.log.list as result index_result }}
+                <div class="mui-clearfix oldData"></div>
+                <div class="center-content">
+                    <p class="mui-pull-left" style="margin-top: 8px;">{{result.dynamicAttr.name}}：</p>
+                    <button id="{{result.dynamicAttr.id}}" class="mui-btn userPickButton attrButton"
+                            data-value="{{result.dynamicAttr.name}}:{{result.attrValue}}:{{result.dynamicAttr.id}}:{{result.itemScore}}:{{result.dynamicAttr.itemCode}}"
+                            type='button'>
+                        {{result.attrValue}}
+                    </button>
+                </div>
+            {{/each}}
+            {{if dname.dname == '教师'}}
+            <div class="mui-clearfix"></div>
+            <div class="center-content teacherContent">
+                <p class="mui-pull-left" style="margin-top: 8px;">教师：</p>
+                <button class="mui-btn userPickButton teacherButton" data-value="{{if dname.log.teacherId != null && dname.log.teacherId !=''}}{{dname.log.teacherId}}:{{dname.log.teacherName}}{{/if}}" type='button'>
+                    {{if dname.log.teacherId != null && dname.log.teacherId !=''}}{{dname.log.teacherName}}{{/if}}
+                    {{if dname.log.teacherId == null || dname.log.teacherId ==''}}请选择{{/if}}
+                </button>
+            </div>
+            {{/if}}
+        <div class="section-images" style="margin-bottom: 0px;margin-left:10px;padding-top: 10px;">
+            <div class="showImg" id="imagesNews" style="display: inline-block;">
+                {{each dname.log.listimgs as img index_img }}
+                <span class="section-images-added" data-img="{{img}}" style="background-image:url('{{img}}')"><i
+                        class="alifont icon-shanchu del">x</i></span>
+                {{/each}}
+            </div>
+            <span class="section-images-add">
+                        <input type="file" id="listInput" style=" z-index: 999;position: absolute;"
+                               accept="image/*" name="listInput" class="file-update"
+                               multiple="multiple"/>
+                    </span>
+        </div>
+        <textarea id="remark" placeholder="文字描述"
+                  style="border:1px solid lightgray;width:90%;margin-left: 10px;margin-top: 10px;">{{dname.log.desc1}}</textarea>
+        {{/if}}
+
+        {{if dname.log == null}}
+            {{each dname.attrs as att }}
+                {{if att.type == '004'}}
+                <div class="mui-clearfix"></div>
+                <div class="center-content">
+                    <p class="mui-pull-left" style="margin-top: 8px;">{{att.name}}：</p>
+                    <button id="{{att.id}}" class="mui-btn userPickButton attrButton" data-value="" type='button'>
+                        请选择
+                    </button>
+                </div>
+                {{/if}}
+            {{/each}}
+        {{if dname.dname == '教师'}}
+            <div class="mui-clearfix "></div>
+            <div class="center-content teacherContent">
+                <p class="mui-pull-left" style="margin-top: 8px;">教师：</p>
+                <button class="mui-btn userPickButton teacherButton" data-value="" type='button'>
+                    请选择
+                </button>
+            </div>
+        {{/if}}
+        <div class="section-images" style="margin-bottom: 0px;margin-left:10px;padding-top: 10px;">
+            <div class="showImg" id="imagesNews" style="display: inline-block;">
+            </div>
+            <span class="section-images-add">
+                        <input type="file" id="listInput" style=" z-index: 999;position: absolute;"
+                               accept="image/*" name="listInput" class="file-update"
+                               multiple="multiple"/>
+                    </span>
+        </div>
+        <textarea id="remark" placeholder="文字描述"
+                  style="border:1px solid lightgray;width:90%;margin-left: 10px;margin-top: 10px;"></textarea>
+        {{/if}}
+    </div>
+</div>
+{{/each}}
+</script>
+
+<script type="text/template" id="segmentedControls-tpl"><!--左边班级模板-->
+{{each records as r index }}
+<p class="mui-text-center" onclick="team(this)"
+   style="margin-top: 10px;margin-bottom: 0px;font-size: 15px;color: black;">
+    <input type="hidden" id="team" value="{{r.id}}"/>
+    {{r.teamName}}</p>
+{{each r.clazzList as rc indext }}
+<a class="mui-control-item bb1 {{ if index == 0 && indext == 0}} mui-active{{/if}}" data-id="{{rc.id}}"
+   data-team-id="{{r.id}}"
+   onclick="grade()">
+    <input class="cg" type="hidden" value="{{rc.grade}}:{{rc.clazz}}:{{r.teamName}}">
+    {{if rc.num1>0}}
+    <span class="mui-badge mui-badge-success mui-badge-inverted"><span class="mui-icon mui-icon-checkmarkempty"></span></span>
+    {{/if}}
+    {{rc.clazz}}
+</a>
+{{/each}}
+{{/each}}
+</script>
+<script src="js/foot.js"></script>
+<script type="text/javascript" src="js/dofun.juploadh5.js"></script>
+<script type="text/javascript" src="js/mui.picker.js"></script>
+<script type="text/javascript" src="js/mui.poppicker.js"></script>
+<script type="text/javascript" src="js/mui.zoom.js"></script>
+<script type="text/javascript" src="js/mui.previewimage.js"></script>
+<script type="text/javascript" src="js/jquery-1.7.2.js"></script>
+<script>
+
+    function team(t) {
+        $('.mui-text-center').css("color", "black");
+        $('.mui-control-item').removeClass("mui-active")
+        $('.mui-text-center').removeClass("team");
+        $(t).addClass("team");
+        $(t).css("color", "#1BBC9B");
+        refreshRightData();
+    }
+
+    // 初始化previewImage
+    mui.previewImage();
+
+    function imgPreview(base64Img) {
+        $("#imgPreview").attr("src", base64Img);
+        mui.trigger($("#imgPreview")[0], 'tap');
+    }
+
+    //图片全屏显示
+    mui('body').on('tap', '.section-images-added', function () {
+        console.info("imgspan taped!")
+        var base64ImgData = this.dataset.img;
+        imgPreview(base64ImgData);
+    });
+
+    //点击班级
+    function grade() {
+        $('.mui-text-center').css("color", "black");
+        $('.mui-text-center').removeClass("team");
+        refreshRightData();
+    }
+
+    var tpid = DOFUN.request('tpid');//模板id
+    var value = DOFUN.request('value');//1级分类 名称
+    var lvalue = DOFUN.request('lvalue');//2级分类 名称
+    var title = value + "-" + lvalue;
+    var seq = DOFUN.request('seq');//2级分类 id
+
+    //			document.getElementById("value").innerHTML = value+"-"+lvalue;
+
+    document.getElementById("XWHebdomad").innerHTML =
+        '<a data-href="Oneday.html?type=1&title=' + title + '">巡查反馈</a></br>' +
+        '<a data-href="Oneday.html?type=2&title=' + title + '">一周综述</a></br>' +
+        '<a data-href="Oneday.html?type=3&title=' + title + '">校园大事记</a></br>' +
+        '<span><a data-href="XWHebdomad.html?tpid=' + tpid + '">一周统计</a><span>';
+
+
+    var left = document.getElementById("segmentedControls");
+    var right = document.getElementById("segmentedControlContent");
+    var submitBtn = document.getElementById("submitBtn");
+
+    DOFUN.commonPage = mui.Class.extend({
+        init: function () {
+            this.loadData();
+            this.initEvent();
+
+        },
+        loadData: function () {
+            this.loadLeft();
+            this.loadRight();
+        },
+        loadLeft: function () {
+            DOFUN.Api.post("clazzInf/teamClazz", {"category2": seq}, function (result) {
+                var data = result.obj;
+                console.log(data);
+                var resets = [];
+                mui(data).each(function (i) {
+                    var aa = data[i].clazzList;
+                    resets.push(aa);
+                })
+                //加载左边班级html
+                document.getElementById("segmentedControls").innerHTML = DOFUN.tpl('segmentedControls-tpl', {
+                    records: data
+                });
+                refreshRightData();
+            });
+
+
+        },
+        loadRight: refreshRightData,
+        initEvent: function () {
+            //学校id
+            var userDataJson = DOFUN.getItem("news");
+            var userData = JSON.parse(userDataJson);
+            var schoolId = userData.agentId;
+            submitBtn.addEventListener('tap', function () {
+
+                var grade = '';
+                var clazz = '';
+                var teamName = '';
+                var teamId = '';//团队id
+
+                if ($('.team').length != 0) {
+                    teamId = $($('.team')[0]).find('#team').val();
+                    postData(schoolId, teamId, grade, clazz, teamName);
+                } else {
+                    if (document.getElementsByClassName("mui-active").length == 0) {
+                        DOFUN.toast("请至少选择一个团队或班级");
+                        return;
+                    }
+                    var a1 = document.getElementsByClassName("mui-active")[0].getElementsByClassName("cg")[0];
+                    grade = a1.value.split(":")[0];
+                    clazz = a1.value.split(":")[1];
+                    teamName = a1.value.split(":")[2];
+                    if (document.getElementsByClassName("oldData").length > 0) {
+                        DOFUN.confirm("继续操作将会覆盖已提交的数据，是否继续？", "提示", function (b) {
+                            if (b) {
+                                postData(schoolId, teamId, grade, clazz, teamName);
+                            }
+                        });
+                    } else {
+                        postData(schoolId, teamId, grade, clazz, teamName);
+                    }
+
+                }
+
+            });
+        }
+    });
+
+    function postData(schoolId, teamId, grade, clazz, teamName) {
+        if ($("input[type='checkbox']:checked").length == 0) {
+            DOFUN.toast("请至少选择一个项目");
+            return;
+        }
+
+        var paramArray = [];
+        $("input[type='checkbox']:checked").each(function () {
+            var did = $(this).val();//字典id 1教师 2	学生 3管理
+            var attrResultStr = '';
+            var teacherStr = '';
+            var remark;
+            var buttonList = $(this).parents('#count').find('button.attrButton');
+            var teacherList = $(this).parents('#count').find('button.teacherButton');
+            var imgArray = $(this).parents(".more-count").find('.section-images-added');
+            var pics = "";
+            $(imgArray).each(function () {
+                pics = pics + ' ' + $(this).attr('data-img');
+            })
+            var newsImgs = null;
+            if (pics!="") {
+                newsImgs = pics.substr(1).split(" ");
+            }
+            var clazzId = "";
+            var clazzIdList = $(".mui-control-item");
+            $(clazzIdList).each(function () {
+                if ($(this).hasClass("mui-active")) {
+                    clazzId = $(this).attr("data-id");
+                }
+            })
+            var remarkDom = $(this).parents('#count').find("#remark");
+            remark = remarkDom[0].value;
+            for (var i = 0; i < buttonList.length; i++) {
+                if (buttonList[i].getAttribute("data-value") != "") {
+                    attrResultStr += buttonList[i].getAttribute("data-value") + "@";
+                }
+            }
+            for (var i = 0; i < teacherList.length; i++) {
+                if (teacherList[i].getAttribute("data-value") != "") {
+                    teacherStr += teacherList[i].getAttribute("data-value");
+                }
+            }
+            if (attrResultStr == "") {
+                DOFUN.toast("请选择内容");
+                return;
+            }
+            // if (pics == "" || pics == null) {
+            //     DOFUN.toast("请上传图片");
+            //     return;
+            // }
+            var parmas = {
+                "clazzId": clazzId,
+                "clazz": clazz,
+                "grade": grade,
+                "templateId": tpid,
+                "category2": seq,
+                "category3": did,
+                "str": attrResultStr,
+                "teacherStr": teacherStr,
+                "listimgs": newsImgs,
+                "desc1": remark,
+                "teamName": teamName,
+                "schoolId": schoolId,
+                "teamId": teamId
+            }
+            paramArray.push(parmas);
+        });
+        if (paramArray.length > 0 && paramArray.length == $("input[type='checkbox']:checked").length) {
+            mui(paramArray).each(function (i) {
+                submitBtn.setAttribute("disabled", "disabled");
+                DOFUN.Api.post("inspectionLogs/add1", paramArray[i], function (result) {
+                    DOFUN.toast("提交成功");
+                    submitBtn.removeAttribute("disabled");
+                    //渲染左边班级已提交标签
+                    setSubmitClazzFlag(teamId, paramArray[i].clazzId);
+                }, true);
+            });
+        }
+
+    }
+
+    mui.plusReady(function () {
+        new DOFUN.Init('common');
+    });
+
+
+    function getClazz() {
+        if ($('.team').length != 0) {
+            return '';
+        } else {
+            if (document.getElementsByClassName("mui-active").length == 0) {
+                return '';
+            }
+            var a1 = document.getElementsByClassName("mui-active")[0].getElementsByClassName("cg")[0];
+            var grade = a1.value.split(":")[0];
+            var clazz = a1.value.split(":")[1];
+            var teamName = a1.value.split(":")[2];
+            return clazz;
+        }
+    }
+
+    /**
+     * 根据右边数据集，渲染左边班级的已提交标签
+     * 使用班级名称对应
+     * @param dnameList
+     */
+    function setSubmitClazzFlag(teamId, clazzId) {
+        if (teamId != '') {//选择的是团队
+            $("a[data-team-id='" + teamId + "']").each(function () {
+                if ($(this).find(".mui-badge-success").size() == 0) {
+                    $(this).find(".cg").after('<span class="mui-badge mui-badge-success mui-badge-inverted"><span class="mui-icon mui-icon-checkmarkempty"></span></span>')
+                }
+            });
+        } else if (clazzId != '') {//选择的是班级
+            if ($("a[data-id='" + clazzId + "']").find(".mui-badge-success").size() == 0) {
+                $("a[data-id='" + clazzId + "']").find(".cg").after('<span class="mui-badge mui-badge-success mui-badge-inverted"><span class="mui-icon mui-icon-checkmarkempty"></span></span>')
+            }
+        }
+        $(".mui-clearfix").removeClass("oldData").addClass("oldData");
+    }
+
+    function refreshRightData() {
+        // 1.查询二级分类的动态属性
+        // 2.渲染dom
+        // 3.将今天已填写的数据进行回显
+        var clazz = getClazz();
+        var userDataJson = DOFUN.getItem("news");
+        var userData = JSON.parse(userDataJson);
+        var schoolId = userData.agentId;
+        var parmas = {
+            "templateId": tpid,
+            "schoolId": schoolId,
+            "seq": seq, //2级分类 id
+            "clazz": clazz
+        }
+        DOFUN.Api.post("dynamicAttr/getId", parmas, function (result) {
+            var data = result.obj;
+            document.getElementById("mui-input-group").innerHTML = DOFUN.tpl('mui-input-group-tpl', {
+                records: data
+            });
+            //渲染上传图片控件
+            jupload = mui('.section-images-add').JUpload();
+            var dynamicAttrList = data.dynamicAttrList;
+            var userPickButtonArray = document.getElementsByClassName("attrButton");
+            // dynamicAttrList.reverse();
+            //渲染属性单选按钮
+            for (var i = 0; i < userPickButtonArray.length; i++) {
+                userPickButtonArray[i].index = i;
+                userPickButtonArray[i].addEventListener("click", function () {
+                    var that = this;
+                    var buttonId = this.getAttribute("id");
+                    var userPicker = new mui.PopPicker();
+                    userPicker.setData(getPickData(buttonId,dynamicAttrList));
+
+                    function getPickData(buttonId,dynamicAttrList) {
+                        var retData = new Array();
+                        var dynamicAttr;
+                        for (var j = 0; j < dynamicAttrList.length; j++) {
+                            if (dynamicAttrList[j].id == buttonId) {
+                                dynamicAttr = dynamicAttrList[j];
+                                break;
+                            }
+                        }
+                        var textone = dynamicAttr.attrOptions;
+                        for (var j = 0; j < textone.length; j++) {
+                            var name = dynamicAttr.name;
+                            var id = dynamicAttr.id;
+                            var itemCode = dynamicAttr.itemCode;
+                            var sValue = dynamicAttr.scores[j];
+                            var one = dynamicAttr.attrOptions[j];
+                            var orderValue = name + ":" + one + ":" + id + ":" + sValue + ":" + itemCode;
+                            retData[j] = {
+                                value: orderValue,
+                                text: dynamicAttr.attrOptions[j],
+                            }
+                        }
+                        return retData;
+                    }
+
+                    userPicker.show(function (items) {
+                        that.innerText = items[0].text;
+                        that.setAttribute("data-value", items[0].value);
+                    }, false);
+                })
+            }
+
+            var teachers = data.teachers;
+            var teacherButtonArray = document.getElementsByClassName("teacherButton");
+            if ($('.team').length != 0) {
+                $(".teacherContent").hide();
+            }else{
+                $(".teacherContent").show();
+            }
+            for (var i = 0; i < teacherButtonArray.length; i++) {
+                teacherButtonArray[i].addEventListener("click", function () {
+                    var that = this;
+                    var teacherPicker = new mui.PopPicker();
+                    teacherPicker.setData(getPickData(teachers));
+
+                    function getPickData(teacherList) {
+                        var retData = new Array();
+                        for (var j = 0; j < teacherList.length; j++) {
+                            var name = teacherList[j].userName;
+                            var id = teacherList[j].userId;
+                            var orderValue = id + ":" +  name;
+                            retData[j] = {
+                                value: orderValue,
+                                text: name,
+                            }
+                        }
+                        return retData;
+                    }
+
+                    teacherPicker.show(function (items) {
+                        that.innerText = items[0].text;
+                        that.setAttribute("data-value", items[0].value);
+                    }, false);
+                })
+            }
+
+        });
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>详情</title>
+		<script src="js/head.js"></script>
+		<script type="text/javascript" src="js/jquery-1.7.2.js" ></script>
+		<style>
+			.partol-list{position:fixed;top:44px;width:100%;z-index:2;}
+			.partol-list .mui-table-view-divider{color:#19af75;}
+			.mui-row.mui-fullscreen>[class*="mui-col-"]{height:100%;}
+			.mui-col-xs-4,.mui-col-xs-8{overflow-y:auto;height:100%;background-color:#fff;}
+			.mui-segmented-control .mui-control-item{line-height:50px;width:100%;}
+			.mui-control-content{display:block;}
+			.mui-bar{background-color: #1BBC9B;}
+			.mui-title{color: white;}
+			.mui-segmented-control.mui-segmented-control-inverted .mui-control-item.mui-active{background-color:#fff;}
+			.mui-segmented-control.mui-segmented-control-inverted .mui-control-item{border:none;position:relative;}
+			.mui-segmented-control.mui-segmented-control-inverted .mui-control-item.mui-active{color:#19af75;}
+			.mui-segmented-control.mui-segmented-control-inverted.mui-segmented-control-vertical .mui-control-item,.mui-segmented-control.mui-segmented-control-inverted.mui-segmented-control-vertical .mui-control-item.mui-active{border-bottom:none;}
+			.mui-segmented-control.mui-segmented-control-inverted{background-color:#fff;color:#1a1a1a;font-size:14px;}
+			.mui-input-group:before,.mui-input-group:after,.mui-input-group .mui-input-row:after{height: 0;}
+			.br1:after,.bb1:after{background-color:#eaebee;}
+			.mui-control-content{font-size:14px;}
+			.mui-control-content .mui-input-row label{color:#bfbfbf;}
+			.mui-bar-nav~.mui-content{padding-top: 20px;}
+			#segmentedControls p{margin-left: 15px;margin-bottom: 5px;}
+		</style>
+	</head>
+	<body>
+		<div class="mui-content mui-row mui-fullscreen" style="top:10px;">
+			<div class="br1">
+				<div id="segmentedControls" class="mui-segmented-control mui-segmented-control-inverted mui-segmented-control-vertical">
+					
+				</div>
+			</div>
+			
+		</div>
+		
+			
+							
+								  
+		<script src="js/foot.js" ></script>
+		<script>
+			
+			var id = DOFUN.request('id');
+			
+			
+			DOFUN.commonPage = mui.Class.extend({
+			    init:function(){
+			        this.initEvent();
+			        this.loadData();
+			    },
+			    loadData:function(){
+			    	this.loadLeft();
+			    	this.loadRight();
+			    },
+			    loadLeft:function(){
+			    	//详情数据
+			    	
+			    	
+			    	DOFUN.Api.get("notice/upSingleStatus/"+id,function(result){
+			    		if(result.rspcod == 200){
+			    			DOFUN.Api.get("notice/detail/"+id,function(result){
+			    		
+			    		var data = result.obj;
+			    		console.info(JSON.stringify(data));
+			    		
+			    		
+			    			var unixTimestamp = new Date(data.addtime) ;
+                            data.addtime = unixTimestamp.toLocaleString()
+			    			
+			    		   
+			    		document.getElementById("segmentedControls").innerHTML='<p>'+data.title+'</p> '+
+			    		' <p>'+data.content+'</p> '+
+			    		' <p>'+data.addtime+'</p> ';
+			
+			    	});
+			    		}
+			    	});
+			    
+			    	
+		
+			    },
+			    loadRight:function(){},
+			    initEvent:function(){}
+			});
+			
+			mui.plusReady(function(){
+			    new DOFUN.Init('common');
+			});
+		</script>
+	</body>
+</html>

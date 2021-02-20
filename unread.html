@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>系统消息</title>
+    <script src="js/head.js"></script>
+    <script type="text/javascript" src="js/jquery-1.7.2.js"></script>
+    <style>
+        .partol-list {
+            position: fixed;
+            width: 100%;
+            z-index: 2;
+        }
+
+        .partol-list .mui-table-view-divider {
+            color: #19af75;
+        }
+
+        .mui-segmented-control .mui-control-item {
+            line-height: 50px;
+            width: 100%;
+        }
+
+        .mui-control-content {
+            display: block;
+        }
+
+        .mui-bar {
+            background-color: #1BBC9B;
+        }
+
+        .mui-title {
+            color: white;
+        }
+
+        .mui-segmented-control.mui-segmented-control-inverted .mui-control-item.mui-active {
+            background-color: #fff;
+        }
+
+        .mui-segmented-control.mui-segmented-control-inverted .mui-control-item {
+            border: none;
+            position: relative;
+        }
+
+        .mui-segmented-control.mui-segmented-control-inverted .mui-control-item.mui-active {
+            color: #19af75;
+        }
+
+        .mui-segmented-control.mui-segmented-control-inverted.mui-segmented-control-vertical .mui-control-item, .mui-segmented-control.mui-segmented-control-inverted.mui-segmented-control-vertical .mui-control-item.mui-active {
+            border-bottom: none;
+        }
+
+        .mui-segmented-control.mui-segmented-control-inverted {
+            background-color: #fff;
+            color: #1a1a1a;
+            font-size: 14px;
+        }
+
+        .mui-input-group:before, .mui-input-group:after, .mui-input-group .mui-input-row:after {
+            height: 0;
+        }
+
+        .br1:after, .bb1:after {
+            background-color: #eaebee;
+        }
+
+        .mui-control-content {
+            font-size: 14px;
+        }
+
+        .mui-control-content .mui-input-row label {
+            color: #bfbfbf;
+        }
+
+        .mui-table-view-cell > a:not(.mui-btn) {
+            margin: -11px -30px;
+        }
+
+        .mui-table-view-cell > a:not(.mui-btn).mui-active {
+            background-color: white;
+        }
+
+        .partol-list .mui-table-view-divider img {
+            margin-left: 10px;
+        }
+
+        .mui-navigate-right:after, .mui-push-left:after, .mui-push-right:after {
+            margin-right: 15px;
+        }
+    </style>
+</head>
+<body>
+<div class="partol-list">
+    <div class="mui-table-view-divider">
+        <img src="img/cls.png"/>系统消息
+    </div>
+</div>
+<div class="mui-content mui-row mui-fullscreen" style="top: 35px;">
+    <div class=" br1">
+        <div class="mui-segmented-control mui-segmented-control-inverted mui-segmented-control-vertical">
+            <ul class="mui-table-view" id="segmentedControls">
+
+            </ul>
+        </div>
+    </div>
+    <div class="">
+        <div class="mui-control-content" id="segmentedControlContent">
+
+        </div>
+        <!--<div style="position: absolute;bottom: 10px;z-index: 20;width: 100%;text-align: center;">
+            <button id="submitBtn" type="button" class="mui-btn mui-btn-blue">提交</button>
+            <div id="XWHebdomad"></div>
+        </div>-->
+    </div>
+</div>
+
+<script type="text/template" id="segmentedControls-tpl">
+
+    {{each records.rows as r index }}
+    <li class="mui-table-view-cell">
+        <a data-href="detail.html?id={{r.id}}" class="mui-navigate-right">
+            {{if r.isread == 1}}
+            <p>{{r.title}}</p>
+
+            <p>{{r.addtime}}</p>
+            {{else}}
+            <p style="color: red;">{{r.title}}</p>
+
+            <p style="color: red;">{{r.addtime}}</p>
+            {{/if}}
+
+        </a>
+    </li>
+
+    {{/each}}
+</script>
+
+
+<script src="js/foot.js"></script>
+<script>
+
+
+    var left = document.getElementById("segmentedControls");
+    var right = document.getElementById("segmentedControlContent");
+    var submitBtn = document.getElementById("submitBtn");
+
+    DOFUN.commonPage = mui.Class.extend({
+        init: function () {
+            this.initEvent();
+            this.loadData();
+        },
+        loadData: function () {
+            this.loadLeft();
+            this.loadRight();
+        },
+        loadLeft: function () {
+            //TODO 渲染班级数据
+
+
+            parmas = {};
+            DOFUN.Api.post("notice/list", parmas, function (result) {
+
+                var data = result.obj;
+                console.info(JSON.stringify(data.rows));
+
+                for (var i = 0; i < data.rows.length; i++) {
+                    var unixTimestamp = new Date(data.rows[i].addtime);
+                    data.rows[i].addtime = unixTimestamp.toLocaleString()
+
+                }
+                left.innerHTML = DOFUN.tpl('segmentedControls-tpl', {
+                    records: data
+                });
+
+
+            });
+
+
+        },
+        loadRight: function () {
+        },
+        initEvent: function () {
+
+        }
+
+    });
+
+    mui.plusReady(function () {
+        new DOFUN.Init('common');
+    });
+</script>
+</body>
+</html>

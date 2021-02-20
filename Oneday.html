@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>巡查反馈</title>
+    <script src="js/head.js"></script>
+    <script type="text/javascript" src="js/jquery-1.7.2.js"></script>
+    <link rel="stylesheet" href="css/mui.picker.css"/>
+    <link rel="stylesheet" href="css/mui.poppicker.css"/>
+    <style>
+        html, body {
+            background-color: white;
+        }
+
+        .partol-list {
+            position: fixed;
+            top: 44px;
+            width: 100%;
+            z-index: 2;
+        }
+
+        .partol-list .mui-table-view-divider {
+            color: #19af75;
+        }
+
+        .mui-bar {
+            background-color: #1BBC9B;
+        }
+
+        .mui-title {
+            color: white;
+        }
+
+        .mui-content {
+            background-color: white;
+        }
+
+        .mui-row.mui-fullscreen > [class*="mui-col-"] {
+            height: 100%;
+        }
+
+        .mui-col-xs-4, .mui-col-xs-8 {
+            overflow-y: auto;
+            height: 100%;
+            background-color: #fff;
+        }
+
+        .mui-segmented-control .mui-control-item {
+            line-height: 50px;
+            width: 100%;
+        }
+
+        .mui-control-content {
+            display: block;
+        }
+
+        .mui-segmented-control.mui-segmented-control-inverted .mui-control-item.mui-active {
+            background-color: #fff;
+        }
+
+        .mui-segmented-control.mui-segmented-control-inverted .mui-control-item {
+            border: none;
+            position: relative;
+        }
+
+        .mui-segmented-control.mui-segmented-control-inverted .mui-control-item.mui-active {
+            color: #19af75;
+        }
+
+        .mui-segmented-control.mui-segmented-control-inverted.mui-segmented-control-vertical .mui-control-item, .mui-segmented-control.mui-segmented-control-inverted.mui-segmented-control-vertical .mui-control-item.mui-active {
+            border-bottom: none;
+        }
+
+        .mui-segmented-control.mui-segmented-control-inverted {
+            background-color: #fff;
+            color: #1a1a1a;
+            font-size: 14px;
+        }
+
+        .mui-input-group .mui-input-row:after {
+            display: none;
+        }
+
+        .mui-input-group:before {
+            height: 0;
+        }
+
+        .mui-input-group:after {
+            display: none;
+        }
+
+        .br1:after, .bb1:after {
+            background-color: #eaebee;
+        }
+
+        .mui-control-content {
+            font-size: 14px;
+        }
+
+        .mui-control-content .mui-input-row label {
+            color: #bfbfbf;
+        }
+
+        textarea {
+            font-size: 14px;
+        }
+
+        textarea::-webkit-input-placeholder {
+            font-size: 14px;
+        }
+
+        .post-btn {
+            background-color: #1BBC9B;
+            color: white;
+            border: none;
+            width: 90%;
+            height: 40px;
+            margin-left: 20px;
+            position: fixed;
+            bottom: 30px;
+            z-index: -1;
+        }
+
+        /*input{font-size: 14px;margin-top: 30px;}*/
+        .mui-input-row.images-group {
+            height: auto;
+        }
+
+        .section-title {
+            padding: 10px 0;
+            font-size: 15px;
+            color: #333;
+            font-weight: 400;
+            margin: 0;
+        }
+
+        .section-images {
+            margin-bottom: 0;
+            display: inline-block;
+            margin-left: 10px;
+        }
+
+        .mui-input-row.images-group {
+            height: auto;
+        }
+
+        .section-images-add {
+            display: inline-block;
+            margin-bottom: 10px;
+            margin-left: 5px;
+            width: 48px;
+            height: 48px;
+            border: 1px solid #999;
+            border-radius: 1px;
+            position: relative;
+        }
+
+        .file-style {
+            width: 50px;
+            height: 50px;
+            border: 1px solid #1BBC9B;
+            margin-left: 20px;
+            background-image: url(img/add.png);
+            background-position: center;
+            background-repeat: no-repeat;
+            margin-top: 30px;
+        }
+
+        .file-update {
+            width: 50px;
+            height: 50px;
+            font-size: 14px;
+            opacity: 0;
+        }
+
+        #imgshow {
+            width: 50px;
+            height: 50px;
+            border: none;
+        }
+
+        #divUL div {
+            float: left;
+            margin-left: 10px;
+            margin-top: 30px;
+        }
+
+        .center-content {
+            margin-top: 20px;
+            width: 100%;
+            height: 40px;
+        }
+
+        .center-content p {
+            width: 58%;
+            padding-left: 20px;
+        }
+
+        .center-content select {
+            width: 50%;
+        }
+        .mui-preview-image.mui-fullscreen {
+            position: fixed;
+            z-index: 20;
+            background-color: #000;
+        }
+
+        .mui-preview-header,
+        .mui-preview-footer {
+            position: absolute;
+            width: 100%;
+            left: 0;
+            z-index: 10;
+        }
+
+        .mui-preview-header {
+            height: 44px;
+            top: 0;
+        }
+
+        .mui-preview-footer {
+            height: 50px;
+            bottom: 0px;
+        }
+
+        .mui-preview-header .mui-preview-indicator {
+            display: block;
+            line-height: 25px;
+            color: #fff;
+            text-align: center;
+            margin: 15px auto 4px;
+            width: 70px;
+            background-color: rgba(0, 0, 0, 0.4);
+            border-radius: 12px;
+            font-size: 16px;
+        }
+
+        .mui-preview-image {
+            display: none;
+            -webkit-animation-duration: 0.5s;
+            animation-duration: 0.5s;
+            -webkit-animation-fill-mode: both;
+            animation-fill-mode: both;
+        }
+
+        .mui-preview-image.mui-preview-in {
+            -webkit-animation-name: fadeIn;
+            animation-name: fadeIn;
+        }
+
+        .mui-preview-image.mui-preview-out {
+            background: none;
+            -webkit-animation-name: fadeOut;
+            animation-name: fadeOut;
+        }
+
+        .mui-preview-image.mui-preview-out .mui-preview-header,
+        .mui-preview-image.mui-preview-out .mui-preview-footer {
+            display: none;
+        }
+
+        .mui-zoom-scroller {
+            position: absolute;
+            display: -webkit-box;
+            display: -webkit-flex;
+            display: flex;
+            -webkit-box-align: center;
+            -webkit-align-items: center;
+            align-items: center;
+            -webkit-box-pack: center;
+            -webkit-justify-content: center;
+            justify-content: center;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            -webkit-backface-visibility: hidden;
+        }
+
+        .mui-zoom {
+            -webkit-transform-style: preserve-3d;
+            transform-style: preserve-3d;
+        }
+
+        .mui-slider .mui-slider-group .mui-slider-item img {
+            width: auto;
+            height: auto;
+            max-width: 100%;
+            max-height: 100%;
+        }
+
+        .mui-android-4-1 .mui-slider .mui-slider-group .mui-slider-item img {
+            width: 100%;
+        }
+
+        .mui-android-4-1 .mui-slider.mui-preview-image .mui-slider-group .mui-slider-item {
+            display: inline-table;
+        }
+
+        .mui-android-4-1 .mui-slider.mui-preview-image .mui-zoom-scroller img {
+            display: table-cell;
+            vertical-align: middle;
+        }
+
+        .mui-preview-loading {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            display: none;
+        }
+
+        .mui-preview-loading.mui-active {
+            display: block;
+        }
+
+        .mui-preview-loading .mui-spinner-white {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            margin-left: -25px;
+            margin-top: -25px;
+            height: 50px;
+            width: 50px;
+        }
+
+        .mui-preview-image img.mui-transitioning {
+            -webkit-transition: -webkit-transform 0.5s ease, opacity 0.5s ease;
+            transition: transform 0.5s ease, opacity 0.5s ease;
+        }
+
+        @-webkit-keyframes fadeIn {
+            0% {
+                opacity: 0;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+
+        @-webkit-keyframes fadeOut {
+            0% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+            }
+        }
+
+        @keyframes fadeOut {
+            0% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="mui-content" style="top: 35px;">
+    <div style="display: none;"><img src="" id="imgPreview" data-preview-src="" data-preview-group="1"></div>
+    <form id="form1" class="mui-input-group">
+        <div class="center-content">
+            <p class="mui-pull-left" style="margin-top: 8px;">类型：<span id="typeStr"></span></p>
+            <!--<button id='type' class="mui-btn" data-value="" type='button'
+                    style="width: 35%;text-overflow: ellipsis;overflow: hidden;white-space: nowrap;padding: 6px 8px;">
+                请选择
+            </button>-->
+        </div>
+        <!--<div class="mui-input-group iradio" id="mui-input-group"></div>-->
+        <div class="mui-input-row" style="height: 230px;padding: 10px;box-sizing: border-box;margin-bottom: 10px;">
+            <textarea id="remark" placeholder="请填写内容" style="height: 220px;border:1px solid #8f8f94 ;"></textarea>
+        </div>
+        <div class="mui-input-row images-group" id="uploadImages">
+            <!--<span style="width: 25%;font-size: 14px;padding-left: 15px;margin-top:15px;" class="uploading-text mui-pull-left section-title">上传图片</span>-->
+            <div class="section-images" style="margin-bottom: 0px;margin-left: 0;padding-top: 10px;">
+                <div class="showImg" id="imagesNews" style="display: inline-block;">
+                </div>
+                <span class="section-images-add">
+							<input type="file" id="listInput" style=" z-index: 999;position: absolute;" accept="image/*"
+                                   name="listInput" class="file-update" multiple="multiple"/>
+		                </span>
+            </div>
+        </div>
+    </form>
+    <!--</div>-->
+
+    <button id="submitBtn" type="button" class="mui-btn post-btn">提交</button>
+    <!--<div style="position: absolute;bottom: 10px;z-index: 20;width: 100%;text-align: center;">
+
+    <div id="XWHebdomad"></div>-->
+</div>
+
+
+<script src="js/foot.js"></script>
+<script type="text/javascript" src="js/mui.picker.js"></script>
+<script type="text/javascript" src="js/mui.poppicker.js"></script>
+<script src="js/dofun.juploadh5.js"></script>
+<script type="text/javascript" src="js/mui.zoom.js"></script>
+<script type="text/javascript" src="js/mui.previewimage.js"></script>
+<script type="text/javascript" src="js/jquery-1.7.2.js"></script>
+<script>
+    var jupload = null;
+    var uploadImages = document.getElementById("uploadImages");
+    var title = DOFUN.request('title');
+    var type = DOFUN.request('type');
+
+    if (type=='1') {
+        $("#typeStr").html("巡查反馈");
+    }else if(type=='2') {
+        $("#typeStr").html("一周综述");
+    }else if(type=='3') {
+        $("#typeStr").html("校园大事记");
+    }
+
+    // 初始化previewImage
+    mui.previewImage();
+    function imgPreview(base64Img) {
+        $("#imgPreview").attr("src", base64Img);
+        mui.trigger($("#imgPreview")[0], 'tap');
+    }
+    //图片全屏显示
+    mui('body').on('tap', '.section-images-added', function () {
+        console.info("imgspan taped!")
+        var base64ImgData = this.dataset.img;
+        imgPreview(base64ImgData);
+    });
+
+    DOFUN.commonPage = mui.Class.extend({
+        init: function () {
+            this.initEvent();
+            this.loadData();
+        },
+        loadData: function () {
+            this.loadLeft();
+            this.loadRight();
+        },
+        loadLeft: function () {
+        },
+        loadRight: function () {
+            /*DOFUN.byId("type").addEventListener("click", function () {
+                var that = this;
+                var userPicker = new mui.PopPicker();
+                userPicker.setData([
+                    {value: "1", text: "一日综述"},
+                    {value: "2", text: "一周综述"},
+                    {value: "3", text: "校园大事记"}
+                ]);
+                userPicker.show(function (items) {
+                    that.innerText = items[0].text;
+                    that.setAttribute("data-value", items[0].value);
+                }, false);
+            });*/
+        },
+        initEvent: function () {
+            jupload = mui('.section-images-add').JUpload();
+            submitBtn.addEventListener('tap', function () {
+                var remark = document.getElementById("remark").value;
+                // var type = document.getElementById("type").getAttribute("data-value");
+
+                var user = DOFUN.User.getUser();
+                var userId = user.id;
+                console.log(userId);
+                var text = "";
+                $('.section-images-added').each(function () {
+                    text = text + ' ' + $(this).attr('data-img');
+                });
+                var imgs = text.substr(1);
+                var newsImgs = imgs.split(" ");
+                console.log(newsImgs);
+//					}
+//			         var imgs = DOFUN.byId("imgshow").src; 
+//			         var str = document.getElementById("str").value; 
+//			         var imagesArray = [].slice.call(uploadImages.querySelectorAll('span.section-images-added'));
+//			         var pic = imagesArray.dataset.img; 
+
+                if (remark == "") {
+                    DOFUN.toast("请填写综述内容");
+                    return;
+                }
+                // if (imgs == "") {
+                //     DOFUN.toast("请先上传图片");
+                //     return;
+                // }
+                parmas = {
+                    "remark": remark,
+                    "type":type,
+                    "listimgs": newsImgs,
+                    "title": title
+
+                }
+                DOFUN.Api.post("inspectionMessage/addMessage", parmas, function (result) {
+                    DOFUN.toast("提交成功");
+                }, true)
+                setTimeout(function () {
+                    history.back();
+                }, 1000)
+            });
+        }
+    });
+
+    mui.plusReady(function () {
+        new DOFUN.Init('common');
+    });
+</script>
+</body>
+</html>

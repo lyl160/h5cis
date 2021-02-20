@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<!-- 校务巡查 分类 -->
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>校务巡查</title>
+    <script src="js/head.js"></script>
+    <style>
+        .mui-bar {
+            background-color: #1BBC9B;
+        }
+
+        .mui-title {
+            color: white;
+        }
+    </style>
+</head>
+<body>
+<div class="mui-content" id="timeselect">
+
+</div>
+<div class="mui-content" id="content"></div>
+<script type="text/template" id="content-tpl">
+    {{each records as r index}}<!--一级分类-->
+    <div class="partol-list">
+        <div class="mui-table-view-divider">
+            <img src="img/m{{index+1}}.png"/>{{r.value}}
+        </div>
+        <ul class="mui-table-view">
+            {{each r.list as l}} <!--二级分类-->
+                {{if l.users.indexOf(userId) >= 0 }} <!--分配的老师才能看到-->
+                    <li class="mui-table-view-cell">
+                        <a data-href="patrolItem.html?tpid={{l.templateId}}&seq={{l.id}}&value={{r.value}}&lvalue={{l.value}}校务巡查"
+                           class="mui-navigate-right">
+                            {{l.value}}
+                        </a>
+                    </li>
+                {{/if}}
+            {{/each}}
+        </ul>
+    </div>
+    {{/each}}
+</script>
+<script src="js/foot.js"></script>
+<script>
+
+    var tpid = DOFUN.request('templateId');
+    var name = DOFUN.request('name');
+    DOFUN.commonPage = mui.Class.extend({
+        init: function () {
+            this.initEvent();
+            this.loadData();
+        },
+        loadData: function () {
+            parmas = {"templateId": tpid, "templateName": name};
+            DOFUN.Api.post("inspectionCategory/category", parmas, function (result) {
+                var categoryLv1 = result.obj;
+                var userDataJson = DOFUN.getItem("news");
+                var userData = JSON.parse(userDataJson);
+                var userId = userData.id;
+                document.getElementById("content").innerHTML = DOFUN.tpl('content-tpl', {
+                    records: categoryLv1 || [],
+                    userId: userId
+                });
+            });
+        },
+        initEvent: function () {
+            var that = this;
+        }
+    });
+
+    mui.plusReady(function () {
+        new DOFUN.Init('common');
+    });
+</script>
+</body>
+</html>

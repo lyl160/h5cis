@@ -1,0 +1,68 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>巡查消息</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<script type="text/javascript" src="js/head.js" ></script>
+		<style>
+			.mui-bar{background-color: #1BBC9B;}
+			.mui-title{color: white;}
+			.partol-list{position:fixed;width:100%;z-index:2;}
+			.partol-list .mui-table-view-divider{color:#19af75;}
+			.partol-list .mui-table-view-divider img{margin-left: 10px;}
+			.mui-content>.mui-table-view:first-child{margin-top: 0px;}
+			.mui-bar-nav~.mui-content{padding-top: 75px;}
+			.mui-table-view-cell>a:not(.mui-btn){margin: -11px -30px;}
+			.mui-navigate-right:after, .mui-push-left:after, .mui-push-right:after{margin-right: 15px;}
+		</style>
+	</head>
+		
+	<body>
+		<div class="partol-list">
+			<div class="mui-table-view-divider">
+				<img src="img/cls.png" />巡查消息
+			</div>
+		</div>
+		<div class="mui-content" style="padding-top: 35px;">
+			<ul class="mui-table-view" id="searchAll">
+				
+			</ul>
+			<script type="text/template" id="searchAll-tpl">
+				{{each recode as r}}
+				<li class="mui-table-view-cell">
+					<a data-href="oneText.html?id={{r.id}}" class="mui-navigate-right">
+						<p>{{r.titleDiy}}</p>
+						<p>{{r.addTime | dateformat:'yyyy-MM-dd HH:mm:ss'}}</p>
+					</a>
+				</li>
+				{{/each}}
+			</script>
+		</div>
+		<script type="text/javascript" src="js/foot.js" ></script>
+		<script type="text/javascript">
+				DOFUN.commonPage = mui.Class.extend({
+					init:function(){
+						this.initEvent();
+						this.loadData();
+					},
+					initEvent:function(){
+						
+						
+					},
+					loadData:function(){
+						DOFUN.Api.get("inspectionMessage/list",function(data){
+							console.log(data.obj);
+							var objtext = data.obj;
+							DOFUN.byId("searchAll").innerHTML = DOFUN.tpl("searchAll-tpl",{recode:objtext})
+						})
+					}
+				})
+				mui.plusReady(function(){
+					new DOFUN.Init("common");
+				})
+		</script>
+	</body>
+
+</html>

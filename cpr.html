@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>一周统计</title>
+		<script src="js/head.js"></script>
+		<style>
+			.partol-list{position:fixed;top:44px;width:100%;z-index:2;}
+			.partol-list .mui-table-view-divider{color:#19af75;}
+			.mui-row.mui-fullscreen>[class*="mui-col-"]{height:100%;}
+			.mui-bar{background-color: #1BBC9B;}
+			.mui-title{color: white;}
+			.mui-content{background-color:inherit;}
+			.mui-segmented-control .mui-control-item{line-height:50px;width:100%;}
+			.mui-control-content{display:block;}
+			.mui-segmented-control.mui-segmented-control-inverted .mui-control-item.mui-active{background-color:#fff;}
+			.mui-segmented-control.mui-segmented-control-inverted .mui-control-item{border:none;position:relative;}
+			.mui-segmented-control.mui-segmented-control-inverted .mui-control-item.mui-active{color:#19af75;}
+			.mui-segmented-control.mui-segmented-control-inverted.mui-segmented-control-vertical .mui-control-item,.mui-segmented-control.mui-segmented-control-inverted.mui-segmented-control-vertical .mui-control-item.mui-active{border-bottom:none;}
+			.mui-segmented-control.mui-segmented-control-inverted{background-color:#fff;color:#1a1a1a;font-size:14px;}
+			.mui-input-group:before,.mui-input-group:after,.mui-input-group .mui-input-row:after{height: 0;}
+			.br1:after,.bb1:after{background-color:#eaebee;}
+			.mui-control-content{font-size:14px;}
+			.mui-control-content .mui-input-row label{color:#bfbfbf;}
+			/*.mui-table-view:after{height: 1px;}*/
+			.mui-table-view-cell.mui-active{background-color: white;}
+			/*ul{display: flex;flex-direction: row;justify-content:space-around;}
+			li{display: flex;flex-direction: column;justify-content: center;align-items: center;}*/
+		</style>
+
+	</head>
+	<body>
+		<div class="mui-content" id="list">
+			
+				
+			
+		</div>
+		<script type="text/template" id="list-tpl">
+			{{each moreData as r }}
+			<!--<ul class="mui-table-view">
+				
+				</ul>-->
+			<ul class="mui-table-view" style="margin-top: 5px;">
+			<li class="mui-table-view-cell">
+				<p class="mui-text-center" style="color: red;font-weight: bold;font-size: 16px;">{{r.dictName}}-{{r.categoryName}}-{{r.attrName}}</p>
+			</li>
+			{{each r.sub as s}}
+			<li class="mui-table-view-cell">
+				<p class="mui-pull-left">{{s.attrValue}}</p>
+				<p class="mui-pull-right">{{s.num}}分</p>
+			</li>
+			{{/each}}
+			</ul>
+			{{/each}}
+		</script>					  
+		<script src="js/foot.js" ></script>
+
+        <script type="text/javascript" src="js/jquery-1.7.2.js" ></script>
+		<script>
+
+			var clazzId = DOFUN.request('clazzId');
+			var templateId = DOFUN.request('teamId');
+			var monday = DOFUN.request('monday');
+			var sunday = DOFUN.request('sunday');
+			DOFUN.commonPage = mui.Class.extend({
+			    init:function(){
+			       
+			        this.loadData();
+			    },
+			    loadData:function(){
+			    	this.loadLeft();
+			    	
+			    },
+			    loadLeft:function(){
+			    	//TODO 渲染班级数据
+			    	parmas={			    		
+			    		"clazzId":clazzId,
+                        "monday":monday,
+                        "sunday":sunday,
+			    		"templateName":"校务巡查",
+			    		"hxd":"hxd"
+			    	}
+			    	DOFUN.Api.post("inspectionLogs/criticism",parmas,function(result){
+			    		var data = result.obj;
+                        console.info(data);
+			    		DOFUN.byId("list").innerHTML = DOFUN.tpl("list-tpl",{moreData:data});
+			    	});
+			    }
+			});
+			
+			mui.plusReady(function(){
+			    new DOFUN.Init('common');
+			});
+		</script>
+	</body>
+</html>

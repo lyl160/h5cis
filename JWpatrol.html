@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>教师执勤</title>
+		<script src="js/head.js"></script>
+		<style>
+			.mui-bar{background-color: #1BBC9B;}
+			.mui-title{color: white;}
+			.mui-bar a{color: white;}
+		</style>
+	</head>
+	<body>
+		<div class="mui-content" id="content"></div>
+		<script type="text/template" id="content-tpl">
+		{{each records as r index}}
+		<div class="partol-list">
+			<div class="mui-table-view-divider">
+				<img src="img/m{{index+1}}.png" />{{r.value}}
+			</div>
+			<ul class="mui-table-view">
+				{{each r.list as l}}
+	            <li class="mui-table-view-cell">
+	                <a data-href="teachersearch.html?tpid={{l.templateId}}&seq={{l.id}}&value={{r.value}}&lvalue={{l.value}}教师执勤" class="mui-navigate-right">
+	                    {{l.value}}
+	                </a>
+	            </li>
+	            {{/each}}
+	        </ul>
+		</div>
+		{{/each}}
+	    </script>
+		<script src="js/foot.js" ></script>
+		<script>
+			
+			var tpid = DOFUN.request('templateId');
+			var name = DOFUN.request('name');
+			DOFUN.commonPage = mui.Class.extend({
+			    init:function(){
+			        this.initEvent();
+			        this.loadData();
+			    },
+			    loadData:function(){
+			    		parmas={"templateId":tpid,
+			    		"templateName":name};
+			        DOFUN.Api.post("inspectionCategory/category",parmas,function(result){
+			        	var data = result.obj;
+			        	document.getElementById("content").innerHTML = DOFUN.tpl('content-tpl',{
+			        		records:data||[]
+		      			});
+		      		});   
+			    },
+			    initEvent:function(){
+			        var that = this;
+			    }
+			});
+			
+			mui.plusReady(function(){
+			    new DOFUN.Init('common');
+			});
+		</script>
+	</body>
+</html>

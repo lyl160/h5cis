@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>一周综述</title>
+		<script src="js/head.js"></script>
+		<script type="text/javascript" src="js/jquery-1.7.2.js" ></script>
+		<style>
+			.partol-list{width:100%;z-index:2;}
+			.partol-list .mui-table-view-divider{color:#19af75;}
+			.mui-row.mui-fullscreen>[class*="mui-col-"]{height:100%;}
+			.mui-col-xs-4,.mui-col-xs-8{overflow-y:auto;height:100%;background-color:#fff;}
+			.mui-segmented-control .mui-control-item{line-height:50px;width:100%;}
+			.mui-control-content{display:block;}
+			.mui-bar{background-color: #1BBC9B;}
+			.mui-title{color: white;}
+			.mui-bar a{color: white;}
+			.mui-segmented-control.mui-segmented-control-inverted .mui-control-item.mui-active{background-color:#fff;}
+			.mui-segmented-control.mui-segmented-control-inverted .mui-control-item{border:none;position:relative;}
+			.mui-segmented-control.mui-segmented-control-inverted .mui-control-item.mui-active{color:#19af75;}
+			.mui-segmented-control.mui-segmented-control-inverted.mui-segmented-control-vertical .mui-control-item,.mui-segmented-control.mui-segmented-control-inverted.mui-segmented-control-vertical .mui-control-item.mui-active{border-bottom:none;}
+			.mui-segmented-control.mui-segmented-control-inverted{background-color:#fff;color:#1a1a1a;font-size:14px;}
+			.mui-input-group:before,.mui-input-group:after,.mui-input-group .mui-input-row:after{height: 0;}
+			.br1:after,.bb1:after{background-color:#eaebee;}
+			.mui-control-content{font-size:14px;}
+			.mui-control-content .mui-input-row label{color:#bfbfbf;}
+			/*.mui-segmented-control.mui-segmented-control-inverted{margin-top: 35px;}*/
+			.mui-table-view-cell>a:not(.mui-btn){margin-left: -35px;}
+			.mui-table-view:after{right:15px;left:15px;height: 1px;}
+			.mui-table-view-cell.mui-active{background-color: white;}
+			.icon-images{width: 25px;height: 25px;}
+		</style>
+	</head>
+	<body>
+		<div class="partol-list">
+			<div class="mui-table-view-divider">
+				<img src="img/cls.png" />班级
+			</div>
+		</div>
+		<div class="mui-content" style="top: 35px;">
+			<div class="br1">
+				<div id="segmentedControls" class="mui-segmented-control mui-segmented-control-inverted mui-segmented-control-vertical">
+					
+					  <ul class="mui-table-view">
+                	<li class="mui-table-view-cell">
+                		<!--<a data-href="cpr.html?clazz={{r.clazz}}&grade={{r.grade}}&teamId={{r.teamId}}" class="mui-navigate-right">-->
+                			<p class="mui-pull-left" style="margin-top: 5px;">总得分</p>
+                			
+                			<img src="img/up.png" id="up" class="icon-images" style="display: none;"/>
+                			<img src="img/down.png" id="down"  class="icon-images" style="display:none;"/>
+                			
+                			<p class="mui-pull-right" style="margin-right: 20px;margin-top: 5px;" id="sum"></p>
+                		<!--</a>-->
+                	</li>
+                </ul>
+				</div>
+			</div>
+			<!--<div class="mui-col-xs-8">
+				<div class="mui-control-content" id="segmentedControlContent">
+					<form id="form1" class="mui-input-group" style="padding-top: 5px;">
+						<div class="mui-input-group iradio" id="mui-input-group"></div>
+						
+						
+					</form>
+				</div>
+				
+			</div>	-->
+		</div>
+		
+		<script type="text/template" id="mui-input-group-tpl">
+			
+                {{each records as r }}
+              
+              <!--  <a class="mui-control-item bb1">{{r.grade}}({{r.clazz}}){{r.scoreNum}}分</a>-->
+                
+                {{/each}}
+			
+	    </script>
+		<script src="js/foot.js" ></script>
+		<script type="text/javascript" src="js/jquery-1.7.2.js" ></script>
+		<script>
+			var tpid = DOFUN.request('tpid');
+			var left = document.getElementById("segmentedControls");
+			var right =  document.getElementById("segmentedControlContent");
+			var submitBtn = document.getElementById("submitBtn");
+			
+			DOFUN.commonPage = mui.Class.extend({
+			    init:function(){
+			       
+			        this.loadData();
+			    },
+			    loadData:function(){
+			    	this.loadLeft();
+			    	
+			    },
+			    loadLeft:function(){
+			    	
+			    	//TODO 渲染班级数据
+			    	parmas={"templateId":tpid}
+			    	DOFUN.Api.post("inspectionLogs/hebdomadhxd",parmas,function(result){
+			    		var data = result.obj;
+			    		console.info(JSON.stringify(data));
+			    		 document.getElementById("sum").innerHTML=data.total_score+"分";
+			    		 if(data.seq == 1)
+			    		 {
+			    		 	$('#down').css("display","block");
+			    		 	$('#sum').css("margin-top","-20px");
+			    		 }
+			    		   else if(data.seq == 2)
+			    		 {
+			    		 	
+			    		 	$('#up').css("display","block");
+			    		 	$('#sum').css("margin-top","-20px");
+			    		 }
+			    		
+			    	});
+			    }
+			});
+			
+			mui.plusReady(function(){
+			    new DOFUN.Init('common');
+			});
+		</script>
+	</body>
+</html>

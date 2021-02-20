@@ -1,0 +1,388 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>巡查详情</title>
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no"/>
+    <script type="text/javascript" src="js/head.js"></script>
+    <style>
+        html {
+            background-color: white;
+        }
+
+        .mui-bar {
+            background-color: #1BBC9B;
+            box-shadow: none;
+        }
+
+        .mui-title {
+            color: white;
+        }
+
+        .mui-content {
+            background-color: white;
+        }
+
+        .order-text {
+            font-size: 15px;
+            margin-left: 15px;
+            margin-top: 10px;
+            color: #777777;
+            margin-bottom: 5px;
+        }
+
+        .class-text p {
+            color: black;
+            margin-bottom: 0px;
+            text-align: justify;
+        }
+
+        .class-text {
+            padding: 0 15px;
+            margin-top: 10px;
+        }
+
+        .images-array {
+            height: auto;
+            border-top: 1px dashed #EFEFEF;
+            border-bottom: 1px dashed #EFEFEF;
+            margin-left: 15px;
+            margin-right: 15px;
+            margin-top: 20px;
+        }
+
+        .images-array img {
+            width: 45px;
+            height: 45px;
+            margin-top: 5px;
+        }
+
+        .search-content img {
+            width: 25px;
+            height: 25px;
+            margin-left: 15px;
+            margin-top: 5px;
+        }
+
+        .new-search {
+            margin-top: 8px;
+            margin-bottom: 0px;
+            margin-left: 10px;
+            color: #1BBC9B;
+        }
+
+        .order-text {
+            color: #1BBC9B;
+        }
+
+        .talk-person {
+            width: 100%;
+            height: 30px;
+            background-color: #F0F1F3;
+            margin-top: 3px;
+        }
+
+        .talk-person p {
+            margin-bottom: 0px;
+            line-height: 30px;
+            margin-left: 15px;
+        }
+
+        .teacher-all {
+            width: 45%;
+            height: 35px;
+            background-color: #1BBC9B;
+            color: white;
+            border: none;
+            margin-left: 0px;
+            margin-top: 20px;
+        }
+
+        .change-images {
+            width: 80%;
+            height: 300px;
+            background-color: white;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 999;
+        }
+        .mui-preview-image.mui-fullscreen {
+            position: fixed;
+            z-index: 20;
+            background-color: #000;
+        }
+
+        .mui-preview-header,
+        .mui-preview-footer {
+            position: absolute;
+            width: 100%;
+            left: 0;
+            z-index: 10;
+        }
+
+        .mui-preview-header {
+            height: 44px;
+            top: 0;
+        }
+
+        .mui-preview-footer {
+            height: 50px;
+            bottom: 0px;
+        }
+
+        .mui-preview-header .mui-preview-indicator {
+            display: block;
+            line-height: 25px;
+            color: #fff;
+            text-align: center;
+            margin: 15px auto 4px;
+            width: 70px;
+            background-color: rgba(0, 0, 0, 0.4);
+            border-radius: 12px;
+            font-size: 16px;
+        }
+
+        .mui-preview-image {
+            display: none;
+            -webkit-animation-duration: 0.5s;
+            animation-duration: 0.5s;
+            -webkit-animation-fill-mode: both;
+            animation-fill-mode: both;
+        }
+
+        .mui-preview-image.mui-preview-in {
+            -webkit-animation-name: fadeIn;
+            animation-name: fadeIn;
+        }
+
+        .mui-preview-image.mui-preview-out {
+            background: none;
+            -webkit-animation-name: fadeOut;
+            animation-name: fadeOut;
+        }
+
+        .mui-preview-image.mui-preview-out .mui-preview-header,
+        .mui-preview-image.mui-preview-out .mui-preview-footer {
+            display: none;
+        }
+
+        .mui-zoom-scroller {
+            position: absolute;
+            display: -webkit-box;
+            display: -webkit-flex;
+            display: flex;
+            -webkit-box-align: center;
+            -webkit-align-items: center;
+            align-items: center;
+            -webkit-box-pack: center;
+            -webkit-justify-content: center;
+            justify-content: center;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            -webkit-backface-visibility: hidden;
+        }
+
+        .mui-zoom {
+            -webkit-transform-style: preserve-3d;
+            transform-style: preserve-3d;
+        }
+
+        .mui-slider .mui-slider-group .mui-slider-item img {
+            width: auto;
+            height: auto;
+            max-width: 100%;
+            max-height: 100%;
+        }
+
+        .mui-android-4-1 .mui-slider .mui-slider-group .mui-slider-item img {
+            width: 100%;
+        }
+
+        .mui-android-4-1 .mui-slider.mui-preview-image .mui-slider-group .mui-slider-item {
+            display: inline-table;
+        }
+
+        .mui-android-4-1 .mui-slider.mui-preview-image .mui-zoom-scroller img {
+            display: table-cell;
+            vertical-align: middle;
+        }
+
+        .mui-preview-loading {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            display: none;
+        }
+
+        .mui-preview-loading.mui-active {
+            display: block;
+        }
+
+        .mui-preview-loading .mui-spinner-white {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            margin-left: -25px;
+            margin-top: -25px;
+            height: 50px;
+            width: 50px;
+        }
+
+        .mui-preview-image img.mui-transitioning {
+            -webkit-transition: -webkit-transform 0.5s ease, opacity 0.5s ease;
+            transition: transform 0.5s ease, opacity 0.5s ease;
+        }
+
+        @-webkit-keyframes fadeIn {
+            0% {
+                opacity: 0;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+
+        @-webkit-keyframes fadeOut {
+            0% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+            }
+        }
+
+        @keyframes fadeOut {
+            0% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+<div class="mui-content">
+    <div id="searchAll"></div>
+    <script type="text/template" id="searchAll-tpl">
+        <p class="order-text">{{recode.titleDiy}}</p>
+        <p class="mui-pull-left" style="margin-left: 15px;">发布人：{{recode.userName}}</p>
+        <p class="mui-pull-right" style="margin-right: 15px;">{{recode.addTime | dateformat:'yyyy-MM-dd HH:mm:ss'}}</p>
+        <div class="mui-clearfix"></div>
+        <div class="class-text">
+            <p>{{recode.remark}}</p>
+        </div>
+        <div class="images-array">
+            {{each recode.listimgs as r }}
+            <img src="{{r | defaultImg}}" id="userImages" class="images" data-preview-src="" data-preview-group="1"/>
+            {{/each}}
+        </div>
+        <input type="hidden" value="{{recode.status}}" id="orderStatus"/>
+    </script>
+    <div class="search-content">
+        <img src="img/search.png" class="mui-pull-left"/>
+        <p class="mui-pull-left new-search"><span id="dataText">0</span>/<span id="number">0</span></p>
+    </div>
+    <div class="mui-clearfix"></div>
+    <div class="talk-person">
+        <p>通知以下人员查看</p>
+    </div>
+    <div style="display: flex;flex-direction: row;justify-content: space-around;">
+        <button class="teacher-all" id="allTeacher">发送给全体教师</button>
+        <button class="teacher-all" id="postAll" style="display: none;">上报校长</button>
+    </div>
+</div>
+<script type="text/javascript" src="js/foot.js"></script>
+<script type="text/javascript" src="js/mui.zoom.js"></script>
+<script type="text/javascript" src="js/mui.previewimage.js"></script>
+<script type="text/javascript" src="js/jquery-1.7.2.js"></script>
+<script type="text/javascript">
+    // 初始化previewImage
+    mui.previewImage();
+
+    DOFUN.commonPage = mui.Class.extend({
+        init: function () {
+            this.initEvent();
+            this.loadData();
+        },
+        initEvent: function () {
+            var postAll = document.getElementById("postAll");
+            postAll.addEventListener("tap", function () {
+                var msgId = DOFUN.request("id");
+                var parmas = {
+                    id: msgId
+                }
+                DOFUN.Api.post("inspectionMessage/editReceiver", parmas, function () {
+                    DOFUN.toast("操作成功");
+                    mui.back();
+                })
+            })
+        },
+        loadData: function () {
+            var messageId = DOFUN.request("id");
+            var postall = DOFUN.byId("postAll");
+            parmas = {
+                "messageId": messageId
+            }
+            var allTeacher = DOFUN.byId("allTeacher");
+            DOFUN.Api.post("inspectionMessage/readCountDetail", parmas, function (data) {
+                console.log(data.obj);
+                var objtext = data.obj.inspectionMessage;
+                var par = DOFUN.getItem("news");
+                var par2 = JSON.parse(par);
+                var uuid = par2.id;
+                if (objtext.receiver != uuid) {
+                    postall.style.display = "none";
+                } else {
+                    postall.style.display = "block";
+                }
+                DOFUN.byId("searchAll").innerHTML = DOFUN.tpl("searchAll-tpl", {recode: objtext})
+//						DOFUN.byId("userImages").src = DOFUN.img_server+objtext.imgs;
+                DOFUN.byId("dataText").innerText = data.obj.unRead;
+                DOFUN.byId("number").innerText = data.obj.allcount;
+                var orderStatus = DOFUN.byId('orderStatus').value;
+                if (orderStatus == 0) {
+                    var messageId = DOFUN.request("id");
+                    allTeacher.addEventListener("tap", function () {
+                        DOFUN.Api.get("inspectionMessage/pushMessage/" + messageId, function (e) {
+                            console.log(e);
+                            DOFUN.toast("发送成功");
+                            allTeacher.style.backgroundColor = "#777777";
+                            allTeacher.innerText = "已发送";
+                            mui.back();
+                        }, true)
+                    })
+                } else {
+                    allTeacher.style.backgroundColor = "#777777";
+                    allTeacher.innerText = "已发送";
+                }
+            })
+
+        }
+    })
+    mui.plusReady(function () {
+        new DOFUN.Init("common");
+    })
+</script>
+</body>
+</html>
