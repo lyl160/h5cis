@@ -701,7 +701,7 @@
             $(imgArray).each(function () {
                 pics = pics + ' ' + $(this).attr('data-img');
             })
-            var newsImgs = pics.substr(1).split(" ");
+            var newsImgs = pics!=""?pics.substr(1).split(" "):[];
             var clazzId = "";
             var clazzIdList = $(".mui-control-item");
             $(clazzIdList).each(function () {
@@ -720,10 +720,10 @@
                 DOFUN.toast("请选择内容");
                 return;
             }
-            if (pics == "" || pics == null) {
-                DOFUN.toast("请上传图片");
-                return;
-            }
+            // if (pics == "" || pics == null) {
+            //     DOFUN.toast("请上传图片");
+            //     return;
+            // }
             var parmas = {
                 "clazzId": clazzId,
                 "clazz": clazz,

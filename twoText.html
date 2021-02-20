@@ -1,6 +1,7 @@
 <!doctype html>
 <html>
 	<head>
+<!--        普通教师的右上角巡查消息列表-详情-->
 		<meta charset="UTF-8">
 		<title>巡查详情</title>
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
@@ -198,15 +199,19 @@
 		<div class="mui-content">
 			<div id="teacherContent"></div>
 			<script type="text/template" id="teacherContent-tpl">
-				<p class="order-text">{{recod.titleDiy}}</p>
-				<p class="mui-pull-left" style="margin-left: 15px;">发布人：{{recod.userName}}</p>
-				<p class="mui-pull-right" style="margin-right: 15px;" >{{recod.addTime | dateformat:'yyyy-MM-dd HH:mm:ss'}}</p>
-				<div class="mui-clearfix"></div>
-				<div class="class-text">
-					<p>{{recod.remark}}</p>
+				<p class="order-text">{{recode.titleDiy}}</p>
+				<p class="mui-pull-left" style="margin-left: 15px;">发布人：{{recode.userName}}</p>
+				<p class="mui-pull-right" style="margin-right: 15px;" >{{recode.addTime | dateformat:'yyyy-MM-dd HH:mm:ss'}}</p>
+                <div class="mui-clearfix"></div>
+                {{if recode.type == 4 || recode.type == 5}}
+                <p class="mui-pull-left" style="margin-left: 15px;">地点：{{recode.place}}</p>
+                <div class="mui-clearfix"></div>
+                {{/if}}
+                <div class="class-text">
+					<p>{{recode.remark}}</p>
 				</div>
 				<div class="images-array">
-					{{each recod.listimgs as r }}
+					{{each recode.listimgs as r }}
 						<img src="{{r | defaultImg}}"  class="images" data-preview-src="" data-preview-group="1" />
 					{{/each}}
 				</div>
@@ -236,7 +241,7 @@
 					DOFUN.Api.post("inspectionMessage/changeIsread",parmas,function(data){
 						console.log(data); 
 						var objtext = data.obj;
-						DOFUN.byId("teacherContent").innerHTML = DOFUN.tpl("teacherContent-tpl",{recod:objtext})
+						DOFUN.byId("teacherContent").innerHTML = DOFUN.tpl("teacherContent-tpl",{recode:objtext})
 					
 					})
 						

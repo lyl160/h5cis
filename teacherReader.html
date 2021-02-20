@@ -1,6 +1,8 @@
 <!doctype html>
 <html>
 	<head>
+<!--        普通教师的右上角巡查消息列表-->
+<!--        访问接口：inspectionMessage/list1-->
 		<meta charset="UTF-8">
 		<title>巡查消息</title>
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
@@ -32,13 +34,19 @@
 				<li class="mui-table-view-cell">
 					<a data-href="twoText.html?messageId={{r.messageId}}" class="mui-navigate-right">
 						{{if r.isread == 1}}
-                        <p>{{r.inspectionMessage.titleDiy}}</p>
-                        <p>发布人：{{r.inspectionMessage.userName}}</p>
-						<p>{{r.addtime | dateformat:'yyyy-MM-dd HH:mm:ss'}}</p>
+                            <p>{{r.inspectionMessage.titleDiy}}</p>
+                            <p>发布人：{{r.inspectionMessage.userName}}</p>
+                            {{if r.inspectionMessage.type == 4 || r.type == 5}}
+                            <p>地点：{{r.inspectionMessage.place}}</p>
+                            {{/if}}
+                            <p>{{r.addtime | dateformat:'yyyy-MM-dd HH:mm:ss'}}</p>
 						{{else}}
-                        <p style="color: red;">{{r.inspectionMessage.titleDiy}}</p>
-                        <p style="color: red;">发布人：{{r.inspectionMessage.userName}}</p>
-						<p style="color: red;">{{r.addtime | dateformat:'yyyy-MM-dd HH:mm:ss'}}</p>
+                            <p style="color: red;">{{r.inspectionMessage.titleDiy}}</p>
+                            <p style="color: red;">发布人：{{r.inspectionMessage.userName}}</p>
+                            {{if r.inspectionMessage.type == 4 || r.type == 5}}
+                            <p style="color: red;">地点：{{r.inspectionMessage.place}}</p>
+                            {{/if}}
+                            <p style="color: red;">{{r.addtime | dateformat:'yyyy-MM-dd HH:mm:ss'}}</p>
 						{{/if}}
 					</a>
 				</li>

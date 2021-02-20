@@ -1,7 +1,8 @@
 <!doctype html>
 <html>
-
 	<head>
+<!--        管理员右上角巡查消息列表-->
+<!--        访问接口：inspectionMessage/list-->
 		<meta charset="UTF-8">
 		<title>巡查消息</title>
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
@@ -34,6 +35,10 @@
 				<li class="mui-table-view-cell">
 					<a data-href="oneText.html?id={{r.id}}" class="mui-navigate-right">
 						<p>{{r.titleDiy}}</p>
+                        <p>发布人：{{r.userName}}</p>
+                        {{if r.type == 4 || r.type == 5}}
+                        <p>地点：{{r.place}}</p>
+                        {{/if}}
 						<p>{{r.addTime | dateformat:'yyyy-MM-dd HH:mm:ss'}}</p>
 					</a>
 				</li>
