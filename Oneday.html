@@ -420,11 +420,13 @@
     var type = DOFUN.request('type');
 
     if (type=='1') {
-        $("#typeStr").html("巡查反馈");
+        $("#typeStr").html("校务巡查反馈");
     }else if(type=='2') {
         $("#typeStr").html("一周综述");
-    }else if(type=='3') {
+    }else if (type == '3') {
         $("#typeStr").html("校园大事记");
+    } else if (type == '6') {
+        $("#typeStr").html("后勤巡查反馈");
     }
 
     // 初始化previewImage

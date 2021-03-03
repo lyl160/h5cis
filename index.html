@@ -163,9 +163,10 @@
 <script>
     //		var userId = DOFUN.request('userId');
     // var userId = "zoujuanjuan@whshljgjxx"; //后勤巡查 测试账号
-    var userId = "Wqy123456"; //后勤巡查 测试账号
+    // var userId = "Wqy123456"; //后勤巡查 测试账号
+    var userId = "tch4169384"; //田晴宁
     // var userId = "liyanmeiwhshljxx"; //总校长
-    // var userId = "gjxgy"; //国际校管
+    //var userId = "gjxgy"; //国际校管
     // var userId = "shaw0158"; //国际校管
     // var userId = "ygxgy"; //阳光校管
     DOFUN.commonPage = mui.Class.extend({
@@ -188,6 +189,7 @@
                         i++;
                     }
                 }
+                addMessage
                 document.getElementById("rowText").innerHTML = "系统消息(<b style='color:red;'>" + i + "</b>)";
             });
 
@@ -281,16 +283,13 @@
                 });
 
 
-
-
-
-                if (teacher == 1 || teacher == 5) { //1超级管理员 5校长 看管理员级别巡查消息
-                    rector.style.display = "block";
-                    classTeacher.style.display = "none";
-                } else { //普通老师看 普通巡查消息
-                    classTeacher.style.display = "block";
-                    rector.style.display = "none";
-                }
+                // if (teacher == 1 || teacher == 5|| teacher == 8) { //1超级管理员 5校长 看管理员级别巡查消息
+                //     rector.style.display = "block";
+                //     classTeacher.style.display = "none";
+                // } else { //普通老师看 普通巡查消息
+                classTeacher.style.display = "block";
+                rector.style.display = "none";
+                // }
 
             })
 

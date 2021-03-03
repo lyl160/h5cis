@@ -609,7 +609,12 @@
 
     var tpid = DOFUN.request('templateId');//模板id
     var name = DOFUN.request('name');
-    document.getElementById("HQHebdomad").innerHTML = '<a data-href="HQHebdomad.html?tpid=' + tpid + '">一周统计</a>';
+    // var value = DOFUN.request('value');//1级分类 名称
+    // var lvalue = DOFUN.request('lvalue');//2级分类 名称
+    var title = '后勤巡查反馈';
+    document.getElementById("HQHebdomad").innerHTML =
+        '<a data-href="Oneday.html?type=6&title=' + title + '">后勤巡查反馈</a></br>'
+        + '<a data-href="HQHebdomad.html?tpid=' + tpid + '">一周统计</a>';
 
     var left = document.getElementById("segmentedControls");
     var right = document.getElementById("segmentedControlContent");

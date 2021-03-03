@@ -649,9 +649,9 @@
     var seq = DOFUN.request('seq');//2级分类 id
 
     //			document.getElementById("value").innerHTML = value+"-"+lvalue;
-
+    var fktitle = value + "-" + lvalue.replaceAll('校务巡查', '校务巡查反馈');
     document.getElementById("XWHebdomad").innerHTML =
-        '<a data-href="Oneday.html?type=1&title=' + title + '">巡查反馈</a></br>' +
+        '<a data-href="Oneday.html?type=1&title=' + fktitle + '">校务巡查反馈</a></br>' +
         '<a data-href="Oneday.html?type=2&title=' + title + '">一周综述</a></br>' +
         '<a data-href="Oneday.html?type=3&title=' + title + '">校园大事记</a></br>' +
         '<span><a data-href="XWHebdomad.html?tpid=' + tpid + '">一周统计</a><span>';

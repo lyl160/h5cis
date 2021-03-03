@@ -206,16 +206,20 @@
                 {{if recode.type == 4 || recode.type == 5}}
                 <p class="mui-pull-left" style="margin-left: 15px;">地点：{{recode.place}}</p>
                 <div class="mui-clearfix"></div>
-                {{/if}}
-                <div class="class-text">
+				{{/if}}
+				<div class="class-text">
 					<p>{{recode.remark}}</p>
 				</div>
 				<div class="images-array">
 					{{each recode.listimgs as r }}
-						<img src="{{r | defaultImg}}"  class="images" data-preview-src="" data-preview-group="1" />
+					<img src="{{r | defaultImg}}" class="images" data-preview-src="" data-preview-group="1"/>
 					{{/each}}
 				</div>
 			</script>
+			<div class="search-content">
+				<img src="img/search.png" class="mui-pull-left"/>
+				<p class="mui-pull-left new-search"><span id="dataText">0</span>/<span id="number">0</span></p>
+			</div>
 		</div>
 		<script type="text/javascript" src="js/foot.js" ></script>
         <script type="text/javascript" src="js/mui.zoom.js"></script>
@@ -236,15 +240,20 @@
 				loadData:function(){
 					var messageId = DOFUN.request("messageId");
 					parmas = {
-						"messageId":messageId
+						"messageId": messageId
 					}
-					DOFUN.Api.post("inspectionMessage/changeIsread",parmas,function(data){
-						console.log(data); 
+					DOFUN.Api.post("inspectionMessage/changeIsread", parmas, function (data) {
+						console.log(data);
 						var objtext = data.obj;
-						DOFUN.byId("teacherContent").innerHTML = DOFUN.tpl("teacherContent-tpl",{recode:objtext})
-					
+						DOFUN.byId("teacherContent").innerHTML = DOFUN.tpl("teacherContent-tpl", {recode: objtext})
+
 					})
-						
+					DOFUN.Api.post("inspectionMessage/readCountDetail", parmas, function (data) {
+						console.log(data.obj);
+						DOFUN.byId("dataText").innerText = data.obj.unRead;
+						DOFUN.byId("number").innerText = data.obj.allcount;
+					})
+
 				}
 			})
 			mui.plusReady(function(){ 
