@@ -488,61 +488,72 @@
 {{each records.dnameList as dname index }}
 <div id="count" class="more-count">
     <div class="mui-input-row mui-checkbox mui-left" style="display: none">
-        <input name="radio" type="checkbox" value="{{dname.did}}" class="select-check" checked >
+        <input name="radio" type="checkbox" value="{{dname.did}}" class="select-check" checked>
         <!--写死 1教师-->
     </div>
 
     <div id="DynamicAttrs">
         {{if dname.log != null}}
-            {{each dname.log.list as result index_result }}
-            <div class="mui-clearfix oldData"></div>
-            <div class="center-content">
-                <p class="mui-pull-left" style="margin-top: 8px;">{{result.dynamicAttr.name}}：</p>
-                <button id="{{result.dynamicAttr.id}}"  class="mui-btn userPickButton" data-value="{{result.dynamicAttr.name}}:{{result.attrValue}}:{{result.dynamicAttr.id}}:{{result.itemScore}}:{{result.dynamicAttr.itemCode}}" type='button'>
+        {{each dname.log.list as result index_result }}
+        {{if result.dynamicAttr.type == '004' && (result.dynamicAttr.uidArr.indexOf(userId+"")>-1)}}
+        <div class="mui-clearfix oldData"></div>
+        <div class="center-content">
+            <p class="mui-pull-left" style="margin-top: 8px;">{{result.dynamicAttr.name}}：</p>
+            {{if result.itemScore != '0'}}
+                <button id="{{result.dynamicAttr.id}}" class="mui-btn userPickButton"
+                        data-value="{{result.dynamicAttr.name}}:{{result.attrValue}}:{{result.dynamicAttr.id}}:{{result.itemScore}}:{{result.dynamicAttr.itemCode}}"
+                        type='button'>
                     {{result.attrValue}}
                 </button>
+            {{/if}}
+            {{if result.itemScore == '0'}}
+                <button id="{{result.dynamicAttr.id}}" class="mui-btn userPickButton" data-value="" type='button'>
+                    请选择
+                </button>
+            {{/if}}
+        </div>
+        {{/if}}
+        {{/each}}
+        <div class="section-images" style="margin-bottom: 0px;margin-left:10px;padding-top: 10px;">
+            <div class="showImg" id="imagesNews" style="display: inline-block;">
+                {{each dname.log.listimgs as img index_img }}
+                <span class="section-images-added" data-img="{{img}}" style="background-image:url('{{img}}')"><i
+                        class="alifont icon-shanchu del">x</i></span>
+                {{/each}}
             </div>
-            {{/each}}
-            <div class="section-images" style="margin-bottom: 0px;margin-left:10px;padding-top: 10px;">
-                <div class="showImg" id="imagesNews" style="display: inline-block;">
-                    {{each dname.log.listimgs as img index_img }}
-                    <span class="section-images-added" data-img="{{img}}" style="background-image:url('{{img}}')"><i
-                            class="alifont icon-shanchu del">x</i></span>
-                    {{/each}}
-                </div>
-                <span class="section-images-add">
+            <span class="section-images-add">
                         <input type="file" id="listInput" style=" z-index: 999;position: absolute;"
                                accept="image/*" name="listInput" class="file-update"
                                multiple="multiple"/>
                     </span>
-            </div>
-            <textarea id="remark" placeholder="文字描述"
-                      style="border:1px solid lightgray;width:90%;margin-left: 10px;margin-top: 10px;">{{dname.log.desc1}}</textarea>
+        </div>
+        <textarea id="remark" placeholder="文字描述"
+                  style="border:1px solid lightgray;width:90%;margin-left: 10px;margin-top: 10px;">{{dname.log.desc1}}</textarea>
         {{/if}}
 
         {{if dname.log == null}}
-            {{each dname.attrs as att }}
-            {{if att.type == '004' && (att.uidArr.indexOf(userId+"")>-1)}}
-            <div class="mui-clearfix"></div>
-            <div class="center-content">
-                <p class="mui-pull-left" style="margin-top: 8px;">{{att.name}}：</p>
-                <button id="{{att.id}}" class="mui-btn userPickButton" data-value="" type='button'>
-                    请选择
-                </button>
+        {{each dname.attrs as att }}
+        {{if att.type == '004' && (att.uidArr.indexOf(userId+"")>-1)}}
+        <div class="mui-clearfix"></div>
+        <div class="center-content">
+            <p class="mui-pull-left" style="margin-top: 8px;">{{att.name}}：</p>
+            <button id="{{att.id}}" class="mui-btn userPickButton" data-value="" type='button'>
+                请选择
+            </button>
+        </div>
+        {{/if}}
+        {{/each}}
+        <div class="section-images" style="margin-bottom: 0px;margin-left:10px;padding-top: 10px;">
+            <div class="showImg" id="imagesNews" style="display: inline-block;">
             </div>
-            {{/if}}
-            {{/each}}
-            <div class="section-images" style="margin-bottom: 0px;margin-left:10px;padding-top: 10px;">
-                <div class="showImg" id="imagesNews" style="display: inline-block;">
-                </div>
-                <span class="section-images-add">
+            <span class="section-images-add">
                         <input type="file" id="listInput" style=" z-index: 999;position: absolute;"
                                accept="image/*" name="listInput" class="file-update"
                                multiple="multiple"/>
                     </span>
-            </div>
-            <textarea id="remark" placeholder="文字描述"
-                      style="border:1px solid lightgray;width:90%;margin-left: 10px;margin-top: 10px;"></textarea>
+        </div>
+        <textarea id="remark" placeholder="文字描述"
+                  style="border:1px solid lightgray;width:90%;margin-left: 10px;margin-top: 10px;"></textarea>
         {{/if}}
     </div>
 </div>
@@ -555,16 +566,17 @@
    style="margin-top: 10px;margin-bottom: 0px;font-size: 15px;color: black;">
     <input type="hidden" id="team" value="{{r.id}}"/>
     {{r.teamName}}</p>
-    {{each r.clazzList as rc indext }}
-    <a class="mui-control-item bb1 {{ if index == 0 && indext == 0}} mui-active{{/if}}" data-id="{{rc.id}}" data-team-id="{{r.id}}"
-       onclick="grade()">
-        <input class="cg" type="hidden" value="{{rc.grade}}:{{rc.clazz}}:{{r.teamName}}">
-        {{if rc.num2>0}}
-        <span class="mui-badge mui-badge-success mui-badge-inverted"><span class="mui-icon mui-icon-checkmarkempty"></span></span>
-        {{/if}}
-        {{rc.clazz}}
-    </a>
-    {{/each}}
+{{each r.clazzList as rc indext }}
+<a class="mui-control-item bb1 {{ if index == 0 && indext == 0}} mui-active{{/if}}" data-id="{{rc.id}}"
+   data-team-id="{{r.id}}"
+   onclick="grade()">
+    <input class="cg" type="hidden" value="{{rc.grade}}:{{rc.clazz}}:{{r.teamName}}">
+    {{if rc.num2>0}}
+    <span class="mui-badge mui-badge-success mui-badge-inverted"><span class="mui-icon mui-icon-checkmarkempty"></span></span>
+    {{/if}}
+    {{rc.clazz}}
+</a>
+{{/each}}
 {{/each}}
 </script>
 <script src="js/foot.js"></script>
@@ -634,7 +646,7 @@
         loadLeft: function () {
             DOFUN.Api.post("clazzInf/teamClazz", function (result) {
                 var data = result.obj;
-			    console.log(data);
+                console.log(data);
                 var resets = [];
                 mui(data).each(function (i) {
                     var aa = data[i].clazzList;
@@ -674,12 +686,12 @@
                     clazz = a1.value.split(":")[1];
                     teamName = a1.value.split(":")[2];
                     if (document.getElementsByClassName("oldData").length > 0) {
-                        DOFUN.confirm("继续操作将会覆盖已提交的数据，是否继续？","提示",function(b){
+                        DOFUN.confirm("继续操作将会覆盖已提交的数据，是否继续？", "提示", function (b) {
                             if (b) {
                                 postData(schoolId, teamId, grade, clazz, teamName);
                             }
                         });
-                    }else {
+                    } else {
                         postData(schoolId, teamId, grade, clazz, teamName);
                     }
 
@@ -689,7 +701,7 @@
         }
     });
 
-    function postData(schoolId,teamId,grade,clazz,teamName){
+    function postData(schoolId, teamId, grade, clazz, teamName) {
         if ($("input[type='checkbox']:checked").length == 0) {
             DOFUN.toast("请至少选择一个项目");
             return;
@@ -747,7 +759,7 @@
         if (paramArray.length > 0 && paramArray.length == $("input[type='checkbox']:checked").length) {
             mui(paramArray).each(function (i) {
                 submitBtn.setAttribute("disabled", "disabled");
-                DOFUN.Api.post("inspectionLogs/add1", paramArray[i], function (result) {
+                DOFUN.Api.post("inspectionLogs/add2", paramArray[i], function (result) {
                     DOFUN.toast("提交成功");
                     submitBtn.removeAttribute("disabled");
                     //渲染左边班级已提交标签
@@ -784,15 +796,15 @@
      * @param dnameList
      */
     function setSubmitClazzFlag(teamId, clazzId) {
-        if (teamId!='') {//选择的是团队
-            $("a[data-team-id='"+teamId+"']").each(function () {
-                if($(this).find(".mui-badge-success").size()==0){
+        if (teamId != '') {//选择的是团队
+            $("a[data-team-id='" + teamId + "']").each(function () {
+                if ($(this).find(".mui-badge-success").size() == 0) {
                     $(this).find(".cg").after('<span class="mui-badge mui-badge-success mui-badge-inverted"><span class="mui-icon mui-icon-checkmarkempty"></span></span>')
                 }
             });
-        }else if(clazzId!='') {//选择的是班级
-            if ($("a[data-id='"+clazzId+"']").find(".mui-badge-success").size()==0) {
-                $("a[data-id='"+clazzId+"']").find(".cg").after('<span class="mui-badge mui-badge-success mui-badge-inverted"><span class="mui-icon mui-icon-checkmarkempty"></span></span>')
+        } else if (clazzId != '') {//选择的是班级
+            if ($("a[data-id='" + clazzId + "']").find(".mui-badge-success").size() == 0) {
+                $("a[data-id='" + clazzId + "']").find(".cg").after('<span class="mui-badge mui-badge-success mui-badge-inverted"><span class="mui-icon mui-icon-checkmarkempty"></span></span>')
             }
         }
         $(".mui-clearfix").removeClass("oldData").addClass("oldData");
@@ -814,7 +826,7 @@
             var userId = userData.id;
             document.getElementById("mui-input-group").innerHTML = DOFUN.tpl('mui-input-group-tpl', {
                 records: data,
-                userId:userId
+                userId: userId
             });
             //渲染上传图片控件
             jupload = mui('.section-images-add').JUpload();
@@ -828,9 +840,9 @@
                     var that = this;
                     var buttonId = this.getAttribute("id");
                     var userPicker = new mui.PopPicker();
-                    userPicker.setData(getPickData(buttonId,dynamicAttrList));
+                    userPicker.setData(getPickData(buttonId, dynamicAttrList));
 
-                    function getPickData(buttonId,dynamicAttrList) {
+                    function getPickData(buttonId, dynamicAttrList) {
                         var retData = new Array();
                         var dynamicAttr;
                         for (var j = 0; j < dynamicAttrList.length; j++) {
